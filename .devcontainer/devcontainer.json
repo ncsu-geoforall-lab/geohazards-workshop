@@ -1,0 +1,23 @@
+{
+	"name": "Geohazards Workshop (GRASS 8.5)",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": ".."
+	},
+	"hostRequirements": {
+		"cpus": 4,
+		"memory": "16gb",
+		"storage": "32gb"
+	},
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv/bin/python",
+				"jupyter.notebookFileRoot": "${containerWorkspaceFolder}/notebooks"
+			},
+			"extensions": ["ms-python.python", "ms-toolsai.jupyter"]
+		}
+	},
+	"postCreateCommand": "uv venv --python /usr/bin/python3 --system-site-packages --allow-existing && uv sync --locked && bash scripts/fetch_data.sh",
+	"remoteUser": "root"
+}

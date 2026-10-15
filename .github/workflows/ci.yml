@@ -1,0 +1,22 @@
+---
+name: Notebooks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  notebooks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build the devcontainer image
+        run: docker build -t workshop .devcontainer
+      - name: Run setup and notebooks in the container
+        run: |
+          docker run --rm -v "$PWD":/workspace -w /workspace workshop bash -c '
+            uv venv --python /usr/bin/python3 --system-site-packages --allow-existing &&
+            uv sync --locked &&
+            bash scripts/fetch_data.sh &&
+            uv run pytest --nbmake notebooks/'
