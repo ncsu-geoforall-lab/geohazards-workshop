@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use these materials, please cite them as below."
+title: "Geohazard Change Detection for Emergency Management with GRASS"
+authors:
+  - family-names: "White"
+    given-names: "Corey T."
+    affiliation: "North Carolina State University"
+    orcid: "https://orcid.org/0000-0002-2903-9924"
+version: 0.1.0
+url: "https://github.com/ncsu-geoforall-lab/geohazards-workshop"
+license: GPL-3.0
+keywords:
+  - grass
+  - change detection
+  - lidar
+  - wildfire
+  - geomorphometry

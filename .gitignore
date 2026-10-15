@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ruff_cache/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Workshop data, downloaded by scripts/fetch_data.sh
+grassdata/
+*.tar.gz
+*.tif
+*.laz
+*.las
+
+# Papers and other reference PDFs stay out of the repo, cite them by DOI
+*.pdf
+
+# Editors
+.vscode/

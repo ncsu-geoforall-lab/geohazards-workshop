@@ -1,0 +1,24 @@
+[project]
+name = "geohazards-workshop"
+version = "0.1.0"
+description = "FOSS4G NA 2026 workshop: geohazard change detection for emergency management with GRASS"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ipykernel>=7.1.0",
+    "matplotlib>=3.10",
+    "numpy>=1.26",
+    "pandas>=2.2",
+    "scipy>=1.14",
+]
+
+[dependency-groups]
+dev = [
+    "nbmake>=1.5",
+    "pre-commit>=4.3.0",
+    "pytest>=8.4.2",
+    "ruff>=0.14.2",
+]
+
+[tool.uv]
+package = false
