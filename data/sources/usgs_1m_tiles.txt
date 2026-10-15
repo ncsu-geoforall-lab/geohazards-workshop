@@ -1,0 +1,15 @@
+# USGS 3DEP 1 m DEM tiles that intersect the Humbug Creek HUC12 (180102060801).
+# HUC12 extent, EPSG:26910: E 515060-529287, N 4620243-4632053.
+# Tile xNNyMMM covers E NN0000-(NN+1)0000 and N (MMM-1)0000-MMM0000.
+# Full list as received from Tim Bailey: usgs_1m_tiles_tim.txt (x53 and y462 tiles fall outside the HUC12).
+
+# Post-fire. CA_NorthernCA_6_B22, collected 2022-09-14 to 2022-10-28, EPSG:6339 + NAVD88 (GEOID18), QL1.
+https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1m/Projects/CA_NorthernCA_B22/TIFF/USGS_1M_10_x51y463_CA_NorthernCA_B22.tif
+https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1m/Projects/CA_NorthernCA_B22/TIFF/USGS_1M_10_x51y464_CA_NorthernCA_B22.tif
+https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1m/Projects/CA_NorthernCA_B22/TIFF/USGS_1M_10_x52y463_CA_NorthernCA_B22.tif
+https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1m/Projects/CA_NorthernCA_B22/TIFF/USGS_1M_10_x52y464_CA_NorthernCA_B22.tif
+
+# Pre-fire, northern strip only (N > 4630000). CA_Klamath_Topography_2018, collected 2018-06-01 to 2018-06-14,
+# EPSG:6339 + NAVD88 (GEOID12B), QL1.
+https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1m/Projects/CA_Klamath_Topography_2018/TIFF/USGS_one_meter_x51y464_CA_Klamath_Topography_2018.tif
+https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1m/Projects/CA_Klamath_Topography_2018/TIFF/USGS_one_meter_x52y464_CA_Klamath_Topography_2018.tif
