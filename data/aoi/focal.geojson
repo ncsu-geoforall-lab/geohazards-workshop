@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "focal",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "name": "Humbug Creek focal region", "source": "Tim Bailey, OpenTopography bbox" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -122.75299, 41.77269 ], [ -122.71729, 41.77269 ], [ -122.71729, 41.79215 ], [ -122.75299, 41.79215 ], [ -122.75299, 41.77269 ] ] ] } }
+]
+}

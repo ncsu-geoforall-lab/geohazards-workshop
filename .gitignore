@@ -18,3 +18,10 @@ grassdata/
 
 # Editors
 .vscode/
+
+# Claude Code worktrees
+.claude/
+CLAUDE.local.md
+
+# Written by the notebooks
+notebooks/epochs.txt
