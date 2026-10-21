@@ -18,11 +18,29 @@ mkdir -p "$DEST"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
-URL="https://github.com/$REPO/releases/download/$TAG/$ASSET"
-echo "Downloading $URL"
-if ! curl -fL --retry 3 -o "$TMP/$ASSET" "$URL"; then
-    echo "Workshop data release $TAG is not available yet." >&2
-    echo "The environment still works. Rerun 'bash scripts/fetch_data.sh' later." >&2
+download() {
+    # With a token (Codespaces, CI, or `export GH_TOKEN=$(gh auth token)`), use
+    # the API so the download also works while the repository is private.
+    local token="${GH_TOKEN:-${GITHUB_TOKEN:-}}"
+    if [ -n "$token" ]; then
+        local api="https://api.github.com/repos/$REPO/releases/tags/$TAG"
+        local asset_url
+        asset_url="$(curl -fsSL -H "Authorization: Bearer $token" "$api" |
+            python3 -c 'import json, sys; print(next(a["url"] for a in json.load(sys.stdin)["assets"] if a["name"] == sys.argv[1]))' "$ASSET")" ||
+            return 1
+        echo "Downloading $ASSET from release $TAG"
+        curl -fL --retry 3 -H "Authorization: Bearer $token" \
+            -H "Accept: application/octet-stream" -o "$TMP/$ASSET" "$asset_url"
+    else
+        local url="https://github.com/$REPO/releases/download/$TAG/$ASSET"
+        echo "Downloading $url"
+        curl -fL --retry 3 -o "$TMP/$ASSET" "$url"
+    fi
+}
+
+if ! download; then
+    echo "Could not download workshop data release $TAG." >&2
+    echo "If the repository is private, set GH_TOKEN and rerun 'bash scripts/fetch_data.sh'." >&2
     exit 0
 fi
 

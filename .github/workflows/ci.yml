@@ -6,6 +6,9 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   notebooks:
     runs-on: ubuntu-latest
@@ -14,8 +17,10 @@ jobs:
       - name: Build the devcontainer image
         run: docker build -t workshop .devcontainer
       - name: Run setup and notebooks in the container
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          docker run --rm -v "$PWD":/workspace -w /workspace workshop bash -c '
+          docker run --rm -e GH_TOKEN -v "$PWD":/workspace -w /workspace workshop bash -c '
             uv venv --python /usr/bin/python3 --system-site-packages --allow-existing &&
             uv sync --locked &&
             bash scripts/fetch_data.sh &&
