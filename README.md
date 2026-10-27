@@ -1,5 +1,7 @@
 # Geohazard Change Detection for Emergency Management with GRASS
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23698905.svg)](https://doi.org/10.5281/zenodo.23698905)
+
 FOSS4G NA 2026 workshop, Sacramento. 2026-11-02, 13:00-16:00, Room Bondi.
 
 Repeat lidar shows how wildfire and the storms that follow it reshape a
