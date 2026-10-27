@@ -60,6 +60,15 @@ required.
 Lidar from the USFS (2013) and USGS 3DEP (2018, 2022). Sources, collection
 dates, and datums are in [data/README.md](data/README.md).
 
+## Funding
+
+This workshop is supported by the U.S. National Science Foundation under award
+[2606178](https://www.nsf.gov/awardsearch/show-award/?AWD_ID=2606178),
+GEO OSE Track 2: Open Geoscience Accelerator: Building the Contributor
+Pipeline. Any opinions, findings, and conclusions or recommendations expressed
+in this material are those of the authors and do not necessarily reflect the
+views of the National Science Foundation.
+
 ## Acknowledgments
 
 Tim Bailey suggested the Humbug Creek site and provided the data sources and
