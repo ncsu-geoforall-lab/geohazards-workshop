@@ -52,3 +52,25 @@ def start(block, required=()):
     tools.g_region(region="focal@PERMANENT")
     print(f"Block {block} ready in mapset {mapset}")
     return tools, session
+
+
+def stable_stats(tools, dod, mask):
+    """Median, NMAD, and cell count of a DoD on the cells of a mask.
+
+    NMAD is 1.4826 times the median absolute deviation from the median, a
+    standard deviation estimate that is not pulled by outliers.
+    """
+    values = "tmp_stable_values"
+    deviation = "tmp_stable_deviation"
+    tools.r_mapcalc(expression=f"{values} = if(!isnull({mask}), {dod}, null())")
+    median = _percentile(tools, values, 50)
+    tools.r_mapcalc(expression=f"{deviation} = abs({values} - {median})")
+    nmad = 1.4826 * _percentile(tools, deviation, 50)
+    n = tools.r_univar(map=values, format="json")["n"]
+    tools.g_remove(type="raster", name=f"{values},{deviation}", flags="f")
+    return {"median": median, "nmad": nmad, "n": n}
+
+
+def _percentile(tools, name, percentile):
+    text = tools.r_quantile(input=name, percentiles=percentile).text
+    return float(text.strip().split(":")[-1])
