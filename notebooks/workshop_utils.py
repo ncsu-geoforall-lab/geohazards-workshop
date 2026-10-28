@@ -23,8 +23,8 @@ def start(block, required=()):
     """Start a GRASS session for a workshop block.
 
     Work happens in the mapset named by WORKSHOP_MAPSET (default "workshop").
-    If any map in `required` is missing there, the checkpoint mapset from the
-    previous block is added to the search path so the block can still run.
+    If any map in `required` is missing there, the checkpoint mapsets of all
+    earlier blocks are added to the search path so the block can still run.
     """
     if not (PROJECT / "PERMANENT").exists():
         raise FileNotFoundError(
@@ -35,19 +35,25 @@ def start(block, required=()):
     tools = Tools()
     tools.g_mapset(flags="c", mapset=mapset)
 
-    missing = [
-        m
-        for m in required
-        if not tools.g_list(type="raster", pattern=m, mapset=mapset).text
-    ]
+    def in_mapset(name):
+        # g.list prints nothing for an empty match, and Tools then returns None.
+        # Compare with None explicitly: truth-testing a ToolResult parses JSON.
+        result = tools.g_list(type="raster", pattern=name, mapset=mapset)
+        return result is not None and bool(result.text.strip())
+
+    missing = [m for m in required if not in_mapset(m)]
     if missing:
-        checkpoint = f"checkpoint_{int(block) - 1:02d}"
-        if not (PROJECT / checkpoint).exists():
+        checkpoints = [
+            f"checkpoint_{n:02d}"
+            for n in range(int(block) - 1, 0, -1)
+            if (PROJECT / f"checkpoint_{n:02d}").exists()
+        ]
+        if not checkpoints:
             raise RuntimeError(
-                f"Missing {missing} and no {checkpoint} mapset to fall back on."
+                f"Missing {missing} and no checkpoint mapsets to fall back on."
             )
-        tools.g_mapsets(operation="add", mapset=checkpoint)
-        print(f"Using {checkpoint} for: {', '.join(missing)}")
+        tools.g_mapsets(operation="add", mapset=",".join(checkpoints))
+        print(f"Missing {', '.join(missing)}; using {', '.join(checkpoints)}")
 
     tools.g_region(region="focal@PERMANENT")
     print(f"Block {block} ready in mapset {mapset}")

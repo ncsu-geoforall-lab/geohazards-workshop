@@ -4,7 +4,7 @@
 set -euo pipefail
 
 REPO="ncsu-geoforall-lab/geohazards-workshop"
-TAG="${DATA_TAG:-data-v0.1}"
+TAG="${DATA_TAG:-data-v0.2}"
 ASSET="humbug_creek.tar.gz"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEST="$ROOT/grassdata"
