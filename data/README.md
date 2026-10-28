@@ -81,8 +81,36 @@ cell, which shifts the surface by that offset and changes the DoD by up to
 - The 2010 legacy collection does not cover the focal region, so the noise
   baseline comes from stable unburned ground across the control line. About
   15 percent of the focal region is unburned.
-- Burn severity raster for the McKinney Fire. The MTBS per-fire bundle is not
-  scriptable from the MTBS site; RAVG is the alternative. Needed in block 02.
+
+## Burn severity
+
+`dnbr` and `burn_severity` in PERMANENT (10 m) come from two Sentinel-2 L2A
+scenes on Element84 Earth Search, imported with *t.stac.item* by
+`scripts/prepare_data.py`:
+
+- Pre-fire: `S2B_10TEM_20220721_0_L2A`, eight days before ignition.
+- Post-fire: `S2B_10TEM_20220909_0_L2A`, after the 2022-08-02 storm and five
+  days before the 2022 lidar collection began.
+
+NBR is (B08 - B12) / (B08 + B12) on reflectance, and `dnbr` is
+1000 x (NBR pre - NBR post) minus its median outside the fire perimeter (2.4).
+
+Reflectance is DN x 1e-4. The Earth Search items list a `raster:bands` offset
+of -0.1 and set `earthsearch:boa_offset_applied: true`, and the pixels already
+have the processing baseline 04.00 offset removed. Applying -0.1 again pushes
+20% of pre-fire cells to near-zero reflectance and moves the unburned median
+dNBR to -25; without it the unburned median is +2.
+
+The classes use the dNBR thresholds MTBS published for this fire
+(`CA4183012289520220729`): increased greenness below -150, unburned to low
+below 35, low below 300, moderate below 530, high from 530. MTBS derived them
+from a Landsat extended assessment (post-fire scene 2023-08-15), so they
+approximate classes for this Sentinel-2 initial assessment.
+
+The build falls back to a local perimeter (`--perimeter`) when the USFS MTBS
+service is unavailable.
+
+Contains modified Copernicus Sentinel data 2022.
 
 ## References
 

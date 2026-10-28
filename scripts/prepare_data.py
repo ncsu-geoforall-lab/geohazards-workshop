@@ -8,12 +8,16 @@ The 2013 USFS rasters need an OpenTopography login, so download them once
 (bare earth and highest hit, GeoTIFF) and pass the files with --dtm2013 and
 --dsm2013. Participants get them from the release.
 
+Burn severity comes from Sentinel-2 through the t.stac addon, so install it
+first: pip install pystac pystac_client tqdm, then g.extension extension=t.stac.
+
 Usage (inside the devcontainer):
     uv run python scripts/prepare_data.py \
         --dtm2013 /path/to/output_be.tif --dsm2013 /path/to/output_hh.tif
 """
 
 import argparse
+import io
 import json
 import subprocess
 import sys
@@ -35,6 +39,20 @@ MTBS_PERIMETERS_2022 = (
 MCKINNEY_FIRE_ID = "CA4183012289520220729"
 EPSG = "26910"
 BUFFER_M = 100
+
+# Sentinel-2 L2A scenes for burn severity, from Element84 Earth Search. Earth
+# Search has already removed the processing baseline 04.00 offset from these
+# pixels (earthsearch:boa_offset_applied), so reflectance is DN * 1e-4.
+EARTH_SEARCH = "https://earth-search.aws.element84.com/v1"
+S2_PRE = "S2B_10TEM_20220721_0_L2A"
+S2_POST = "S2B_10TEM_20220909_0_L2A"
+# dNBR (x1000) thresholds published by MTBS for this fire (Landsat, extended
+# assessment). They are an approximation for this Sentinel-2 initial assessment.
+MTBS_THRESHOLDS = {"greenness": -150, "low": 35, "moderate": 300, "high": 530}
+SEVERITY_CLASSES = (
+    "1:Unburned to low\n2:Low\n3:Moderate\n4:High\n5:Increased greenness\n"
+)
+SEVERITY_COLORS = "1 0:100:0\n2 127:255:212\n3 255:255:0\n4 255:0:0\n5 127:255:0\n"
 
 sys.path.append(
     subprocess.check_output(["grass", "--config", "python_path"], text=True).strip()
@@ -74,6 +92,82 @@ def clip(src, dest, bounds):
     print(f"Wrote {dest}")
 
 
+def add_burn_severity(tools):
+    """Compute 10 m dNBR and MTBS-threshold severity classes in PERMANENT.
+
+    Needs the t.stac addon (g.extension extension=t.stac) and pystac_client.
+    """
+    th = MTBS_THRESHOLDS
+    tools.g_region(region="focal", res=10, flags="a")
+    tools.t_stac_item(
+        url=EARTH_SEARCH,
+        collection_id="sentinel-2-l2a",
+        ids=f"{S2_PRE},{S2_POST}",
+        asset_keys="nir,swir22",
+        method="bilinear",
+        resolution="value",
+        resolution_value=10,
+        extent="region",
+        flags="d",
+    )
+    bands = []
+    for label, item in (("pre", S2_PRE), ("post", S2_POST)):
+        nir = f"sentinel-2-l2a.{item}.nir"
+        swir = f"sentinel-2-l2a.{item}.swir22"
+        bands += [nir, swir]
+        n, s = f'(double("{nir}") * 0.0001)', f'(double("{swir}") * 0.0001)'
+        tools.r_mapcalc(
+            expression=(
+                f"tmp_nbr_{label} = if(({n} + {s}) < 0.02, null(), "
+                f"({n} - {s}) / ({n} + {s}))"
+            )
+        )
+    tools.v_to_rast(input="mckinney_perimeter", output="tmp_burned", use="val", value=1)
+    tools.r_mapcalc(expression="tmp_dnbr = 1000 * (tmp_nbr_pre - tmp_nbr_post)")
+    tools.r_mapcalc(
+        expression="tmp_unburned = if(isnull(tmp_burned), tmp_dnbr, null())"
+    )
+    offset = float(
+        tools.r_quantile(input="tmp_unburned", percentiles=50).text.split(":")[-1]
+    )
+    tools.r_mapcalc(expression=f"dnbr = tmp_dnbr - {offset}")
+    tools.r_mapcalc(
+        expression=(
+            f"burn_severity = if(dnbr < {th['greenness']}, 5, if(dnbr < {th['low']}, 1, "
+            f"if(dnbr < {th['moderate']}, 2, if(dnbr < {th['high']}, 3, 4))))"
+        )
+    )
+    tools.r_category(
+        map="burn_severity", separator=":", rules=io.StringIO(SEVERITY_CLASSES)
+    )
+    tools.r_colors(map="burn_severity", rules=io.StringIO(SEVERITY_COLORS))
+    tools.r_colors(map="dnbr", color="differences")
+    source = f"Sentinel-2 L2A {S2_PRE} and {S2_POST}, Element84 Earth Search"
+    tools.r_support(
+        map="dnbr",
+        title="dNBR x1000 (pre minus post), McKinney Fire",
+        units="dNBR x1000",
+        source1=source,
+        history=f"Offset {offset:.1f} removed (median dNBR outside the MTBS perimeter)",
+    )
+    tools.r_support(
+        map="burn_severity",
+        title="Burn severity, McKinney Fire",
+        source1=source,
+        source2=f"MTBS {MCKINNEY_FIRE_ID} dNBR thresholds {th}",
+    )
+    tools.g_remove(
+        type="raster",
+        name=",".join(
+            bands
+            + ["tmp_nbr_pre", "tmp_nbr_post", "tmp_burned", "tmp_dnbr", "tmp_unburned"]
+        ),
+        flags="f",
+    )
+    tools.g_region(region="focal")
+    print(f"Burn severity added (dNBR offset {offset:.1f})")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument(
@@ -83,6 +177,11 @@ def main():
         "--dsm2013",
         type=Path,
         help="USFS 2013 highest-hit DSM from OpenTopography, for canopy height",
+    )
+    parser.add_argument(
+        "--perimeter",
+        type=Path,
+        help="Local copy of the MTBS perimeter GeoJSON, used instead of the MTBS service",
     )
     parser.add_argument("--out", type=Path, default=REPO / "grassdata")
     args = parser.parse_args()
@@ -94,7 +193,10 @@ def main():
     raw.mkdir(parents=True, exist_ok=True)
 
     perimeter = raw / "mckinney_perimeter.geojson"
-    fetch_perimeter(perimeter)
+    if args.perimeter:
+        perimeter.write_text(args.perimeter.read_text())
+    else:
+        fetch_perimeter(perimeter)
 
     gs.create_project(project, epsg=EPSG)
     with gs.setup.init(project) as session:
@@ -107,6 +209,7 @@ def main():
         tools.g_region(flags="s")  # also make it the project default
         region = tools.g_region(flags="g", format="json")
         bounds = (region["west"], region["south"], region["east"], region["north"])
+        add_burn_severity(tools)
 
     clip(B22_TILE, raw / "usgs_2022_dtm.tif", bounds)
     if args.dtm2013:
