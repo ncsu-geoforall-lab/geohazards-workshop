@@ -35,14 +35,16 @@ Use this only if you already run GRASS. The `r.dem` tools need
 **GRASS 8.5 or newer**.
 
 1. Install GRASS 8.5 from <https://grass.osgeo.org/download/>.
-2. Install the `r.dem` toolset from a GRASS session:
+2. Install the workshop version of the `r.dem` toolset (v1.1.0, which adds
+   `r.dem.dod`) from a GRASS session:
 
    ```bash
-   g.extension extension=r.dem
+   curl -fsSL https://github.com/ncsu-geoforall-lab/r.dem/archive/refs/tags/v1.1.0.tar.gz | tar -xz
+   g.extension extension=r.dem url=r.dem-1.1.0/src
    ```
 
-   On Linux and macOS this compiles two C tools, so you need a C compiler and
-   `make`. On Windows the prebuilt addon is installed.
+   This compiles two C tools, so you need a C compiler and `make`. On Windows,
+   use Option 1 or 2 instead.
 3. Install the Python packages into the Python that GRASS uses:
 
    ```bash
