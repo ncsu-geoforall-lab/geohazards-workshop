@@ -68,9 +68,13 @@ GeoTIFF output with the bare-earth and highest-hit layers, then pass
 minus bare earth gives pre-fire canopy height for block 02. Cite the dataset
 as listed under References.
 
-The delivered 2013 grid starts at 520422.29, 4626838.83, so it is offset
-0.71 m and 0.83 m from the whole-meter 2022 grid. `r.import` resamples both
-onto the region grid.
+The delivered 2013 grid starts at 520422.29, 4626838.83, so its cells sit
+0.29 m east and 0.17 m south of the whole-meter grid the 2022 data and the
+focal region use. `r.import` keeps that grid because the CRS already matches.
+Notebook 01 resamples the 2013 DTM onto the region with *r.resamp.interp*
+(bilinear). Reading the native grid on the region instead takes the nearest
+cell, which shifts the surface by that offset and changes the DoD by up to
+2 m on steep slopes.
 
 ## Still to confirm
 
