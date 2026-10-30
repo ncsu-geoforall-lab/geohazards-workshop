@@ -1,0 +1,35 @@
+---
+pagetitle: "Wrap-up: Geohazard Change Detection with GRASS"
+format:
+  revealjs:
+    theme: [default, grass.scss]
+    embed-resources: true
+    slide-number: c/t
+    width: 1600
+    height: 900
+    margin: 0.06
+    transition: none
+    auto-stretch: false
+---
+
+## Run it on your own area
+
+- Two DEMs with collection dates, from USGS 3DEP or OpenTopography
+- A stable mask you can defend, made of ground you expect did not change
+- Zones that matter to your users, such as burn severity, land cover, or subwatersheds
+- The chain: *r.import* and *r.resamp.interp*, *t.register*, *r.dem.nk*, *r.dem.bias* when you measure a bias, *r.dem.lod*, *r.dem.change*, *r.dem.errprop*, zonal summaries, *r.dem.screen*
+
+## Three checks to carry over
+
+1. Line up the grids before differencing. *r.dem.dod* warns you when they do not.
+2. Report the stable-ground median and NMAD before and after every correction.
+3. Count the stable cells your LoD flags. If the share is far from the nominal rate, calibrate the LoD.
+
+## Take it home
+
+- `notebooks/exports/` has `sig_slope.tif`, `screen.tif`, and `basins.gpkg` for ArcGIS Pro or QGIS
+- Materials: <https://github.com/ncsu-geoforall-lab/geohazards-workshop>
+- r.dem 1.1.0: [10.5281/zenodo.23719842](https://doi.org/10.5281/zenodo.23719842)
+- Questions and bugs: issues on the workshop repository or OSGeo/grass-addons
+
+![](images/grass-green-horizontal.svg){width="280"}
