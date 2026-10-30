@@ -1,5 +1,6 @@
 """Shared setup for the workshop notebooks."""
 
+import math
 import os
 import subprocess
 import sys
@@ -81,6 +82,13 @@ def stable_stats(tools, dod, mask):
     n = tools.r_univar(map=values, format="json")["n"]
     tools.g_remove(type="raster", name=f"{values},{deviation}", flags="f")
     return {"median": median, "nmad": nmad, "n": n}
+
+
+def rounded(value, digits=2):
+    """Round to significant digits. Volumes are not known to the cubic meter."""
+    if value == 0:
+        return 0
+    return round(value, digits - 1 - math.floor(math.log10(abs(value))))
 
 
 def _percentile(tools, name, percentile):

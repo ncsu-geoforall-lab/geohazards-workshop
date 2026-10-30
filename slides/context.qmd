@@ -44,7 +44,7 @@ Every notebook starts from a checkpoint, so you can rejoin at any block.
 ::: {.column width="52%"}
 - A tributary of the Klamath River in Siskiyou County, HUC12 180102060801, 96 km²
 - Red: the 2022 McKinney Fire perimeter
-- Green: our 3.2 x 2.2 km study region, across the fire control line
+- Green: our 3.0 x 2.2 km study region, across the fire control line
 :::
 ::::
 
@@ -90,7 +90,7 @@ Four days after ignition, monsoonal moisture built a convective thunderstorm ove
 ![](figures/dod.jpg){width="100%"}
 :::
 ::: {.column width="42%"}
-DoD = 2022 DTM minus 2013 DTM
+DoD = 2022 DTM minus 2013 DTM, after the co-registration in block 02
 
 - Yellow to red: lowering (erosion)
 - Cyan to navy: raising (deposition)
@@ -104,10 +104,10 @@ The question for the next three hours is how much of this is real.
 
 | Source of error | What we measure at Humbug Creek |
 |---|---|
-| Datum realizations | Both files declare EPSG:26910, and a NADCON5 transform of 2013 moves it 0.59 m |
+| Datum realizations | Both files declare EPSG:26910. Applying NADCON5 to 2013 would add a 0.59 m error |
 | Geoid models | GEOID12 to GEOID18 moves heights 2 to 3 cm |
 | Grid alignment | 2013 cells sit 0.29 m and 0.17 m off the 2022 grid |
-| Co-registration | 5 cm horizontal and 9 cm vertical after alignment |
+| Co-registration | *r.dem.nk* measures 5 cm horizontal and 9 cm vertical between the epochs |
 | Vegetation | Burned canopy and understory change what the ground filter keeps |
 | Noise | NMAD of 7.6 cm on stable ground |
 
@@ -167,7 +167,7 @@ The smallest change we will call real, at 95% confidence.
 
 ![](figures/severity_bars.png){width="62%"}
 
-Net change per hectare between 2013 and 2022, above the level of detection. It includes all surface lowering, not only sediment that left.
+Net change per hectare between 2013 and 2022, above the level of detection. Read it as surface lowering, which includes burned duff, litter, and understory, not only sediment that left.
 
 ## The tools
 
@@ -188,6 +188,4 @@ Materials: <https://github.com/ncsu-geoforall-lab/geohazards-workshop>
 
 ## Let's start
 
-Open `notebooks/00_setup_check.ipynb` and run all cells.
-
-Every check should print `OK`.
+Open `notebooks/01_data_and_time.ipynb` and run the cells one at a time.
