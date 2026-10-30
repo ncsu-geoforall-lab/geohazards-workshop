@@ -1,0 +1,65 @@
+/*-- scss:defaults --*/
+
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;400;500;700&family=Fira+Mono:wght@400;500&display=swap");
+
+// GRASS brand tokens.
+$gs-primary-color: #4cb05b;
+$gs-primary-dark-color: #088b36;
+$gs-secondary-color: #00393f;
+$gs-secondary-alt-color: #27575c;
+$gs-secondary-light-color: #4a787d;
+$gs-white-color: #f7f7f7;
+$gs-black-color: #021905;
+$gs-grey-color: #91908f;
+$gs-grey-light-color: #f0f0f1;
+
+$font-family-sans-serif: "Fira Sans", sans-serif;
+$font-family-monospace: "Fira Mono", monospace;
+$body-bg: $gs-white-color;
+$body-color: $gs-black-color;
+$link-color: $gs-primary-dark-color;
+$presentation-heading-font: "Fira Sans", sans-serif;
+$presentation-heading-color: $gs-secondary-alt-color;
+$presentation-heading-font-weight: 700;
+$presentation-font-size-root: 34px;
+$code-color: $gs-secondary-color;
+$code-bg: $gs-grey-light-color;
+
+/*-- scss:rules --*/
+
+.reveal h2 {
+  font-weight: 200;
+  color: $gs-secondary-light-color;
+}
+
+.reveal h1 {
+  font-weight: 700;
+  color: $gs-secondary-alt-color;
+}
+
+.reveal .slide-number {
+  color: $gs-grey-color;
+}
+
+.reveal .source {
+  font-size: 0.5em;
+  color: $gs-grey-color;
+}
+
+.reveal .big-number {
+  font-size: 2.2em;
+  font-weight: 700;
+  color: $gs-secondary-alt-color;
+  line-height: 1.1;
+}
+
+.reveal section.title-dark,
+.reveal .title-dark h1,
+.reveal .title-dark h2,
+.reveal .title-dark p {
+  color: $gs-white-color;
+}
+
+.reveal img {
+  border-radius: 0.2rem;
+}

@@ -25,3 +25,7 @@ CLAUDE.local.md
 
 # Written by the notebooks
 notebooks/epochs.txt
+
+# Rendered slides, build with quarto render slides/context.qmd
+slides/*.html
+slides/.quarto/
