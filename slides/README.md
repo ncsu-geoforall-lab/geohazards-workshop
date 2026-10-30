@@ -1,12 +1,14 @@
-# Context slides
+# Slides
 
-The 20 minute context deck for the start of the workshop, built with Quarto
-revealjs in the GRASS theme (`grass.scss`).
+The 20 minute context deck for the start of the workshop (`context.qmd`) and
+the wrap-up deck (`wrapup.qmd`), built with Quarto revealjs in the GRASS theme
+(`grass.scss`).
 
-Render a self-contained HTML file that works offline:
+Render self-contained HTML files that work offline:
 
 ```bash
 quarto render slides/context.qmd
+quarto render slides/wrapup.qmd
 ```
 
 The figures in `figures/` are committed, so rendering does not need the
