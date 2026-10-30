@@ -29,3 +29,6 @@ notebooks/epochs.txt
 # Rendered slides, build with quarto render slides/context.qmd
 slides/*.html
 slides/.quarto/
+notebooks/*_transform*.txt
+notebooks/bias_fit.json
+notebooks/volumes_*.csv

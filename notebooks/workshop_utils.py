@@ -31,9 +31,15 @@ def start(block, required=()):
             f"No workshop data in {PROJECT}. Run `bash scripts/fetch_data.sh`."
         )
     mapset = os.environ.get("WORKSHOP_MAPSET", "workshop")
-    session = gj.init(PROJECT / "PERMANENT")
-    tools = Tools()
-    tools.g_mapset(flags="c", mapset=mapset)
+    if (PROJECT / mapset).exists():
+        # Start in the mapset directly. Switching to it with g.mapset fails while
+        # the previous notebook's kernel still holds a session there.
+        session = gj.init(PROJECT / mapset)
+        tools = Tools()
+    else:
+        session = gj.init(PROJECT / "PERMANENT")
+        tools = Tools()
+        tools.g_mapset(flags="c", mapset=mapset)
 
     def in_mapset(name):
         # g.list prints nothing for an empty match, and Tools then returns None.

@@ -40,9 +40,12 @@ By the end of the workshop you will be able to:
 | 14:45 | Break | |
 | 14:55 | Level of detection and significant change | [03_lod_and_change](notebooks/03_lod_and_change.ipynb) |
 | 15:30 | Products for emergency management | [04_hazard_products](notebooks/04_hazard_products.ipynb) |
-| 15:50 | Wrap-up and adapting the workflow to your area | 05_your_aoi |
+| 15:50 | Wrap-up and questions | |
 
 Each notebook starts by loading a checkpoint, so you can rejoin at any block.
+If you fall behind, open the next notebook and run all cells. It picks up the
+maps it needs from the checkpoints of the earlier blocks, and you do not need
+to finish or close the notebook you were in.
 
 ## Getting started
 
