@@ -136,6 +136,7 @@ The smallest change we will call real, at 95% confidence.
 - LoD = 1.96 x NMAD of the DoD on stable ground
 - Error grows with slope, from an NMAD of 6 cm below 10 degrees to 11 cm above 40 degrees
 - About 11% of stable cells pass a nominal 95% limit, so the limit is optimistic
+- Calibrated so that 5% of stable cells pass, the multiplier is 2.9 instead of 1.96, and net lowering drops by about 40%
 
 ## Where we are headed: significant change
 
