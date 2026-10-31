@@ -1,5 +1,6 @@
 """Shared setup for the workshop notebooks."""
 
+import math
 import os
 import subprocess
 import sys
@@ -31,9 +32,15 @@ def start(block, required=()):
             f"No workshop data in {PROJECT}. Run `bash scripts/fetch_data.sh`."
         )
     mapset = os.environ.get("WORKSHOP_MAPSET", "workshop")
-    session = gj.init(PROJECT / "PERMANENT")
-    tools = Tools()
-    tools.g_mapset(flags="c", mapset=mapset)
+    if (PROJECT / mapset).exists():
+        # Start in the mapset directly. Switching to it with g.mapset fails while
+        # the previous notebook's kernel still holds a session there.
+        session = gj.init(PROJECT / mapset)
+        tools = Tools()
+    else:
+        session = gj.init(PROJECT / "PERMANENT")
+        tools = Tools()
+        tools.g_mapset(flags="c", mapset=mapset)
 
     def in_mapset(name):
         # g.list prints nothing for an empty match, and Tools then returns None.
@@ -75,6 +82,13 @@ def stable_stats(tools, dod, mask):
     n = tools.r_univar(map=values, format="json")["n"]
     tools.g_remove(type="raster", name=f"{values},{deviation}", flags="f")
     return {"median": median, "nmad": nmad, "n": n}
+
+
+def rounded(value, digits=2):
+    """Round to significant digits. Volumes are not known to the cubic meter."""
+    if value == 0:
+        return 0
+    return round(value, digits - 1 - math.floor(math.log10(abs(value))))
 
 
 def _percentile(tools, name, percentile):

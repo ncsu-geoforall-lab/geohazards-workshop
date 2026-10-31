@@ -16,7 +16,7 @@ burned channels.
   Dataset, EPSG:4269.
 - `aoi/focal.geojson`: the workshop region, the bbox in Tim Bailey's
   OpenTopography link (-122.7530, 41.7727, -122.7173, 41.7922). About
-  3.2 x 2.2 km at 1 m, all inside B22 tile x52y463. The full HUC12 is the
+  3.0 x 2.2 km at 1 m, all inside B22 tile x52y463. The full HUC12 is the
   optional extension.
 - Fire perimeter: MTBS McKinney Fire, `CA4183012289520220729` (Extended
   assessment, post-fire scene 2023-08-15), fetched from the USFS EDW MTBS
@@ -50,8 +50,9 @@ preprocessing.
   result depend on network access.
 - GEOID18 minus GEOID12B undulation across the focal region is -0.021 to
   -0.027 m, so 2022 heights read 2 to 3 cm higher for the same ellipsoid
-  height. This assumes GEOID12A equals GEOID12B in CONUS (12B changed only
-  Puerto Rico and the Virgin Islands), which still needs a citation.
+  height. GEOID12B stands in for GEOID12A here. NGS documents GEOID12B as
+  identical to GEOID12A except in Puerto Rico
+  ([GEOID12B technical details](https://geodesy.noaa.gov/research/technical-details/USGG2012-GEOID12B-technical-information.pdf)).
 
 ## Getting the 2013 DTM
 
@@ -76,7 +77,7 @@ Notebook 01 resamples the 2013 DTM onto the region with *r.resamp.interp*
 cell, which shifts the surface by that offset and changes the DoD by up to
 2 m on steep slopes.
 
-## Still to confirm
+## Noise baseline
 
 - The 2010 legacy collection does not cover the focal region, so the noise
   baseline comes from stable unburned ground across the control line. About
@@ -92,7 +93,8 @@ scenes on Element84 Earth Search, imported with *t.stac.item* by
 - Post-fire: `S2B_10TEM_20220909_0_L2A`, after the 2022-08-02 storm and five
   days before the 2022 lidar collection began.
 
-NBR is (B08 - B12) / (B08 + B12) on reflectance, and `dnbr` is
+B12 is natively 20 m, so NBR has an effective resolution of 20 m resampled to
+10 m. NBR is (B08 - B12) / (B08 + B12) on reflectance, and `dnbr` is
 1000 x (NBR pre - NBR post) minus its median outside the fire perimeter (2.4).
 
 Reflectance is DN x 1e-4. The Earth Search items list a `raster:bands` offset
