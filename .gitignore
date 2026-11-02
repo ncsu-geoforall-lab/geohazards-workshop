@@ -39,3 +39,4 @@ notebooks/exports/
 _site/
 
 **/*.quarto_ipynb
+notebooks/storm_*.gif

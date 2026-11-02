@@ -7,6 +7,7 @@ root inside the devcontainer:
 """
 
 import io
+import shutil
 import subprocess
 import sys
 from datetime import date
@@ -392,3 +393,10 @@ fig.tight_layout()
 fig.savefig(OUT / "severity_bars.png", dpi=150, transparent=True)
 plt.close(fig)
 print("Wrote severity_bars.png", [round(v) for v in values])
+
+# Storm animations written by notebook 05, if it has run.
+for scenario in ("prefire", "postfire"):
+    gif = REPO / "notebooks" / f"storm_{scenario}.gif"
+    if gif.exists():
+        shutil.copy(gif, OUT / gif.name)
+        print(f"Copied {gif.name}")

@@ -6,6 +6,8 @@ format:
     embed-resources: true
     slide-number: c/t
     footer: "[Workshop home](../index.qmd)"
+    logo: images/nsf-logo.png
+    include-after-body: grass-corner.html
     width: 1600
     height: 900
     margin: 0.06
@@ -28,6 +30,7 @@ format:
 
 ## Take it home
 
+- Optional notebook 05 simulates the peak of the storm with *r.sim.water* on burned and pre-fire ground
 - `notebooks/exports/` has `sig_slope.tif`, `screen.tif`, and `basins.gpkg` for ArcGIS Pro or QGIS
 - Materials: <https://github.com/ncsu-geoforall-lab/geohazards-workshop>
 - r.dem 1.1.0: [10.5281/zenodo.23719842](https://doi.org/10.5281/zenodo.23719842)
