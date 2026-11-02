@@ -1,0 +1,43 @@
+---
+name: Site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: site
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build the devcontainer image
+        run: docker build -t workshop .devcontainer
+      - name: Run the notebooks against the workshop data
+        run: |
+          docker run --rm -v "$PWD":/workspace -w /workspace workshop bash -c '
+            uv venv --python /usr/bin/python3 --system-site-packages --allow-existing &&
+            uv sync --locked &&
+            bash scripts/fetch_data.sh &&
+            cd notebooks &&
+            for nb in 0*.ipynb; do
+              uv run --with nbconvert jupyter nbconvert --to notebook --execute \
+                --ExecutePreprocessor.timeout=1800 --inplace "$nb"
+            done'
+          sudo chown -R "$(id -u):$(id -g)" .
+      - uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.10.18
+      - name: Render and publish to gh-pages
+        uses: quarto-dev/quarto-actions/publish@v2
+        with:
+          target: gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

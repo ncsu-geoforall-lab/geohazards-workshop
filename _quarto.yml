@@ -1,0 +1,73 @@
+---
+project:
+  type: website
+  output-dir: _site
+  render:
+    - index.qmd
+    - SETUP.md
+    - notebooks/00_setup_check.ipynb
+    - notebooks/01_data_and_time.ipynb
+    - notebooks/02_coregister_and_bias.ipynb
+    - notebooks/03_lod_and_change.ipynb
+    - notebooks/04_hazard_products.ipynb
+    - slides/context.qmd
+    - slides/wrapup.qmd
+    - data/README.md
+
+# The site workflow runs the notebooks in the devcontainer first, so Quarto only
+# renders the outputs already saved in them and never needs GRASS.
+execute:
+  enabled: false
+
+website:
+  title: "Geohazard Change Detection with GRASS"
+  site-url: https://ncsu-geoforall-lab.github.io/geohazards-workshop/
+  repo-url: https://github.com/ncsu-geoforall-lab/geohazards-workshop
+  repo-actions: [source, issue]
+  # Previous and next links at the bottom of each page follow the sidebar order.
+  page-navigation: true
+  sidebar:
+    style: docked
+    contents:
+      - href: SETUP.md
+        text: Setup
+      - section: Notebooks
+        contents:
+          - href: notebooks/00_setup_check.ipynb
+            text: "00 Setup check"
+          - href: notebooks/01_data_and_time.ipynb
+            text: "01 Data, datums, and time"
+          - href: notebooks/02_coregister_and_bias.ipynb
+            text: "02 Co-registration and bias"
+          - href: notebooks/03_lod_and_change.ipynb
+            text: "03 Level of detection and change"
+          - href: notebooks/04_hazard_products.ipynb
+            text: "04 Products for emergency management"
+      - href: data/README.md
+        text: Data
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      # Links to the first page of the sidebar, so it stays active on every
+      # setup, notebook, and data page.
+      - href: SETUP.md
+        text: Workshop
+      - text: Slides
+        menu:
+          - href: slides/context.qmd
+            text: Context
+          - href: slides/wrapup.qmd
+            text: Wrap-up
+    right:
+      - icon: github
+        href: https://github.com/ncsu-geoforall-lab/geohazards-workshop
+  page-footer:
+    left: "Supported by the U.S. National Science Foundation under award 2606178."
+    right: "Code GPL-3.0. Text CC BY 4.0."
+
+format:
+  html:
+    theme: [cosmo, site/grass.scss]
+    toc: true
+    code-copy: true

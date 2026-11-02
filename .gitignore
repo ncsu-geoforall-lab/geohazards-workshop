@@ -33,3 +33,7 @@ notebooks/*_transform*.txt
 notebooks/bias_fit.json
 notebooks/volumes_*.csv
 notebooks/exports/
+
+# Quarto site, built by .github/workflows/site.yml
+/.quarto/
+_site/

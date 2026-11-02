@@ -63,3 +63,11 @@ $code-bg: $gs-grey-light-color;
 .reveal img {
   border-radius: 0.2rem;
 }
+
+.reveal .footer a {
+  font-weight: 500;
+}
+
+.reveal.has-dark-background .footer a {
+  color: $gs-white-color;
+}
