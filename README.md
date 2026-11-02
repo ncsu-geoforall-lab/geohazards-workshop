@@ -45,6 +45,9 @@ By the end of the workshop you will be able to:
 | 15:30 | Products for emergency management | [04_hazard_products](notebooks/04_hazard_products.ipynb) |
 | 15:50 | Wrap-up and adapting the workflow to your area | [wrap-up slides](slides/wrapup.qmd) |
 
+Optional: [05_overland_flow](notebooks/05_overland_flow.ipynb) simulates the
+peak of the 2 August storm with `r.sim.water` on burned and pre-fire ground.
+
 Each notebook starts by loading a checkpoint, so you can rejoin at the start
 of any part. If you fall behind, open the next notebook and run all cells. It
 picks up the maps it needs from the checkpoints of the earlier parts, and you

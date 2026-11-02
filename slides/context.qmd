@@ -6,6 +6,8 @@ format:
     embed-resources: true
     slide-number: c/t
     footer: "[Workshop home](../index.qmd)"
+    logo: images/nsf-logo.png
+    include-after-body: grass-corner.html
     width: 1600
     height: 900
     margin: 0.06
@@ -19,7 +21,9 @@ FOSS4G NA 2026, Sacramento
 
 Corey T. White, Center for Geospatial Analytics, NC State University
 
-![](images/grass-white-horizontal.svg){width="320"}
+![](images/cga-ncsu-white.png){height="120"}
+
+![](images/nsf-logo.png){height="80" style="vertical-align: middle; margin-right: 1rem;"} Supported by the U.S. National Science Foundation under award 2606178
 
 ## Today
 
@@ -110,6 +114,23 @@ Each step set up the next one.
 ::::
 
 [Sentinel-2 true color, one color stretch for both dates. Contains modified Copernicus Sentinel data 2022.]{.source}
+
+## Simulating the peak of the storm
+
+:::: {.columns}
+::: {.column width="50%"}
+![](figures/storm_prefire.gif){width="100%"}
+
+Before the fire
+:::
+::: {.column width="50%"}
+![](figures/storm_postfire.gif){width="100%"}
+
+After the fire, about five times the peak discharge
+:::
+::::
+
+[*r.sim.water*, 100 mm/h for 30 minutes on 10 m land cover and burn severity. Roughness and infiltration are illustrative. Optional notebook 05.]{.source}
 
 ## Two lidar surveys
 
@@ -221,7 +242,7 @@ Materials: <https://github.com/ncsu-geoforall-lab/geohazards-workshop>
 - Supported by the U.S. National Science Foundation under award 2606178
 - Data from USFS Region 5 and OpenTopography ([10.5069/G9FJ2F12](https://doi.org/10.5069/G9FJ2F12)), USGS 3DEP, USGS NHD, MTBS, and modified Copernicus Sentinel data 2022
 
-![](images/grass-green-horizontal.svg){width="280"}
+![](images/grass-green-horizontal.svg){width="260"} ![](images/cga-ncsu.png){height="100" style="margin-left: 2rem;"} ![](images/nsf-logo.png){height="100" style="margin-left: 2rem;"}
 
 ## Let's start
 
