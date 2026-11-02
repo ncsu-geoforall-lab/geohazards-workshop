@@ -5,9 +5,8 @@ format:
     theme: [default, grass.scss]
     embed-resources: true
     slide-number: c/t
-    footer: "[Workshop home](../index.qmd)"
-    logo: images/nsf-logo.png
-    include-after-body: grass-corner.html
+    footer: '[Workshop home](../index.qmd) ![](images/cga-ncsu.png){.on-light height="38"} ![](images/cga-ncsu-white.png){.on-dark height="38"} ![](images/nsf-logo.png){height="38"}'
+    include-after-body: includes/grass-corner.html
     width: 1600
     height: 900
     margin: 0.06
@@ -49,7 +48,7 @@ The abstract named Hurricane Helene as the main case. Today is all Humbug Creek,
 ![](figures/location.jpg){width="100%"}
 :::
 ::: {.column width="42%"}
-![](figures/california.png){width="48%"}
+![](figures/california.png){width="36%"}
 
 - Klamath River tributary in Siskiyou County, a 96 km² watershed
 - Red: burned in the 2022 McKinney Fire
