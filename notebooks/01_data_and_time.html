@@ -229,6 +229,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">04 Products for emergency management</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/05_overland_flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">05 Simulating the storm (optional)</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
@@ -282,7 +288,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>We start with two lidar DTMs of the focal region. One was flown in September 2013. The other was flown in fall 2022, six to twelve weeks after the McKinney Fire and the August 2 storm. By the end of this part both epochs are in GRASS, registered in a space-time raster dataset, and differenced into a first DEM of Difference (DoD). The rest of the workshop is about how far to trust it.</p>
-<div id="1b4db8ed" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:44:48.629706Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:44:48.629536Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:44:48.815840Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:44:48.814772Z&quot;}}" data-execution_count="1">
+<div id="1b4db8ed" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:03:23.087440Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:03:23.087281Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:03:23.291809Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:03:23.290738Z&quot;}}" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> io</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
@@ -297,7 +303,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="coordinate-reference-systems-and-datums" class="level2">
 <h2 class="anchored" data-anchor-id="coordinate-reference-systems-and-datums">Coordinate reference systems and datums</h2>
 <p>Both files report the same coordinate reference system (CRS).</p>
-<div id="bbcd7243" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:44:48.818458Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:44:48.817762Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:44:48.956251Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:44:48.955679Z&quot;}}" data-execution_count="2">
+<div id="bbcd7243" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:03:23.293657Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:03:23.293421Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:03:23.457084Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:03:23.456161Z&quot;}}" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>epochs <span class="op">=</span> {</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dtm_2013_native"</span>: RAW <span class="op">/</span> <span class="st">"usfs_2013_dtm.tif"</span>,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dtm_2022"</span>: RAW <span class="op">/</span> <span class="st">"usgs_2022_dtm.tif"</span>,</span>
@@ -333,7 +339,7 @@ dtm_2022: NAD83 / UTM zone 10N</code></pre>
 </tbody>
 </table>
 <p>The file headers do not record the NAD83 realization. If we tell PROJ the 2013 file is the original NAD83 and ask for NAD83(2011), it applies the NADCON5 grid shift. Without the grid it silently applies none.</p>
-<div id="84040795" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:44:48.958266Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:44:48.958113Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:44:50.453608Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:44:50.452691Z&quot;}}" data-execution_count="3">
+<div id="84040795" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:03:23.458762Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:03:23.458593Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:03:24.992275Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:03:24.991332Z&quot;}}" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>point <span class="op">=</span> <span class="st">"522000 4625000 0</span><span class="ch">\n</span><span class="st">"</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> network <span class="kw">in</span> (<span class="st">"OFF"</span>, <span class="st">"ON"</span>):</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    out <span class="op">=</span> subprocess.run(</span>
@@ -355,7 +361,7 @@ PROJ_NETWORK=ON: 522000 4625000 -&gt; 522000.202 4625000.552</code></pre>
 <section id="import-both-epochs" class="level2">
 <h2 class="anchored" data-anchor-id="import-both-epochs">Import both epochs</h2>
 <p>The computational region is the focal area at 1 m. <code>r.import</code> clips each file to the region. Both files already use the project CRS, so nothing is reprojected, and each epoch keeps the grid it was delivered on.</p>
-<div id="ae32e2bc" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:44:50.455289Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:44:50.455120Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:44:52.079212Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:44:52.078344Z&quot;}}" data-execution_count="4">
+<div id="ae32e2bc" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:03:24.993926Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:03:24.993754Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:03:26.172419Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:03:26.171366Z&quot;}}" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, path <span class="kw">in</span> epochs.items():</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    tools.r_import(</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">input</span><span class="op">=</span><span class="bu">str</span>(path),</span>
@@ -376,12 +382,12 @@ dtm_2022: offset from the region grid -0.000 m east, +0.000 m north</code></pre>
 </div>
 </div>
 <p>The 2022 grid sits on the region grid. The 2013 grid is offset by about a third of a cell. Any tool that reads the 2013 DTM on this region takes the nearest 2013 cell, which moves the whole surface by that offset. Resample it onto the region with bilinear interpolation and use that as the working 2013 DTM.</p>
-<div id="01f5c6f0" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:44:52.080869Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:44:52.080694Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:44:55.169616Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:44:55.168890Z&quot;}}" data-execution_count="5">
+<div id="01f5c6f0" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:03:26.174264Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:03:26.174048Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:03:28.441170Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:03:28.440345Z&quot;}}" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>tools.r_resamp_interp(<span class="bu">input</span><span class="op">=</span><span class="st">"dtm_2013_native"</span>, output<span class="op">=</span><span class="st">"dtm_2013"</span>, method<span class="op">=</span><span class="st">"bilinear"</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> (<span class="st">"dtm_2013"</span>, <span class="st">"dtm_2022"</span>):</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    tools.r_relief(<span class="bu">input</span><span class="op">=</span>name, output<span class="op">=</span><span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">_relief"</span>, overwrite<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="9e840ab2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:44:55.171409Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:44:55.171230Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:44:57.617359Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:44:57.616328Z&quot;}}" data-execution_count="6">
+<div id="9e840ab2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:03:28.443105Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:03:28.442796Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:03:31.004240Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:03:31.003231Z&quot;}}" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>tools.v_to_rast(</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">input</span><span class="op">=</span><span class="st">"mckinney_perimeter@PERMANENT"</span>,</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    output<span class="op">=</span><span class="st">"burned_area"</span>,</span>
@@ -421,7 +427,7 @@ dtm_2022: offset from the region grid -0.000 m east, +0.000 m north</code></pre>
 <section id="the-temporal-framework" class="level2">
 <h2 class="anchored" data-anchor-id="the-temporal-framework">The temporal framework</h2>
 <p>With two epochs a time series sounds like overkill. It stops being overkill the first time you add a third collection, and it keeps the acquisition dates attached to the data. Each epoch is registered with its collection window as a time interval.</p>
-<div id="97dbb851" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:44:57.621477Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:44:57.621317Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:45:01.222919Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:45:01.221930Z&quot;}}" data-execution_count="7">
+<div id="97dbb851" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:03:31.009232Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:03:31.009021Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:03:35.083521Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:03:35.082374Z&quot;}}" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GRASS intervals end exclusively, so each end date is the day after the last flight.</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"epochs.txt"</span>, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    f.write(<span class="st">"dtm_2013|2013-09-04|2013-09-08</span><span class="ch">\n</span><span class="st">"</span>)</span>
@@ -447,7 +453,7 @@ dtm_2022|2022-09-14 00:00:00|2022-10-29 00:00:00</code></pre>
 <section id="a-naive-dod" class="level2">
 <h2 class="anchored" data-anchor-id="a-naive-dod">A naive DoD</h2>
 <p>Subtract the earlier epoch from the later one with <em>r.dem.dod</em>, pulling the map names from the dataset in time order. Negative values are surface lowering (erosion), positive values are surface raising (deposition). <code>range=1</code> fixes the color scale at plus or minus 1 m so later DoDs compare with this one.</p>
-<div id="5249780d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:45:01.224718Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:45:01.224539Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:45:03.480267Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:45:03.479275Z&quot;}}" data-execution_count="8">
+<div id="5249780d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:03:35.085282Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:03:35.085067Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:03:37.422292Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:03:37.421155Z&quot;}}" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> tools.t_rast_list(</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">input</span><span class="op">=</span><span class="st">"dtm"</span>, columns<span class="op">=</span><span class="st">"name"</span>, order<span class="op">=</span><span class="st">"start_time"</span>, flags<span class="op">=</span><span class="st">"u"</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>).text.split()</span>
@@ -458,7 +464,7 @@ dtm_2022|2022-09-14 00:00:00|2022-10-29 00:00:00</code></pre>
 <pre><code>dod_naive = dtm_2022 - dtm_2013</code></pre>
 </div>
 </div>
-<div id="5e489881" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:45:03.481830Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:45:03.481622Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:45:04.373609Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:45:04.372699Z&quot;}}" data-execution_count="9">
+<div id="5e489881" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:03:37.423858Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:03:37.423692Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:03:38.325474Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:03:38.324489Z&quot;}}" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dod <span class="op">=</span> gj.Map(width<span class="op">=</span><span class="dv">700</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>dod.d_shade(shade<span class="op">=</span><span class="st">"dtm_2022_relief"</span>, color<span class="op">=</span><span class="st">"dod_naive"</span>)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>dod.d_vect(</span>
@@ -479,7 +485,7 @@ dtm_2022|2022-09-14 00:00:00|2022-10-29 00:00:00</code></pre>
 <section id="what-nearest-cell-sampling-does" class="level3">
 <h3 class="anchored" data-anchor-id="what-nearest-cell-sampling-does">What nearest-cell sampling does</h3>
 <p><em>r.mapcalc</em> reads every input on the region grid and takes the nearest cell. Give it the native 2013 grid and compare with the resampled DoD. <em>r.dem.dod</em> run on the same native grid resamples it and prints a warning with the offset.</p>
-<div id="9e811c9a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:45:04.381771Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:45:04.381567Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:45:07.506720Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:45:07.505811Z&quot;}}" data-execution_count="10">
+<div id="9e811c9a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:03:38.332819Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:03:38.332634Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:03:40.911751Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:03:40.910860Z&quot;}}" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep the warning text so it shows in the notebook.</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> Tools(capture_stderr<span class="op">=</span><span class="va">True</span>, consistent_return_value<span class="op">=</span><span class="va">True</span>).r_dem_dod(</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    dem<span class="op">=</span><span class="st">"dtm_2022"</span>, reference<span class="op">=</span><span class="st">"dtm_2013_native"</span>, output<span class="op">=</span><span class="st">"dod_resampled"</span>, <span class="bu">range</span><span class="op">=</span><span class="dv">1</span></span>
@@ -505,7 +511,7 @@ Nearest-cell DoD minus resampled DoD: min -2.18 m, max +2.25 m, std 0.108 m</cod
 <section id="burned-and-unburned-ground" class="level2">
 <h2 class="anchored" data-anchor-id="burned-and-unburned-ground">Burned and unburned ground</h2>
 <p>If the DoD were all real change, unburned ground would average close to zero. Compare the two.</p>
-<div id="463ac146" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:45:07.508417Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:45:07.508252Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:45:09.007397Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:45:09.006361Z&quot;}}" data-execution_count="11">
+<div id="463ac146" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:03:40.913537Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:03:40.913377Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:03:42.426404Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:03:42.425347Z&quot;}}" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>stats <span class="op">=</span> tools.r_univar(<span class="bu">map</span><span class="op">=</span><span class="st">"dod_naive"</span>, zones<span class="op">=</span><span class="st">"burned"</span>, flags<span class="op">=</span><span class="st">"e"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"json"</span>)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> zone <span class="kw">in</span> stats:</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(</span>
@@ -522,7 +528,7 @@ Nearest-cell DoD minus resampled DoD: min -2.18 m, max +2.25 m, std 0.108 m</cod
 <section id="your-turn" class="level2">
 <h2 class="anchored" data-anchor-id="your-turn">Your turn</h2>
 <p>Error on steep slopes is often larger because a small horizontal offset turns into a large vertical one. Split the unburned ground into slope classes and compare the DoD spread two ways: the standard deviation, and the NMAD (normalized median absolute deviation), a spread estimate that a few large outliers cannot pull. Change <code>breaks</code> and see how the numbers move.</p>
-<div id="6ea998a5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:45:09.009119Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:45:09.008940Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:45:14.544365Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:45:14.543588Z&quot;}}" data-execution_count="12">
+<div id="6ea998a5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:03:42.428040Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:03:42.427883Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:03:48.348555Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:03:48.347443Z&quot;}}" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>tools.r_slope_aspect(elevation<span class="op">=</span><span class="st">"dtm_2013"</span>, slope<span class="op">=</span><span class="st">"slope_2013"</span>, overwrite<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Slope class breaks in degrees. Try other breaks, then rerun this cell and the next.</span></span>
@@ -557,7 +563,7 @@ Nearest-cell DoD minus resampled DoD: min -2.18 m, max +2.25 m, std 0.108 m</cod
 </div>
 </div>
 <p>Map the slope classes on the unburned ground, colored from light to dark by their mean offset, with the mean in the legend. If the offset were a single vertical shift, every class would have the same mean. Rerun this cell after changing the class breaks.</p>
-<div id="5d6875fb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:45:14.546406Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:45:14.546237Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:45:15.781701Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:45:15.780825Z&quot;}}" data-execution_count="13">
+<div id="5d6875fb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:03:48.350288Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:03:48.350080Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:03:49.681120Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:03:49.680172Z&quot;}}" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>means <span class="op">=</span> {n: spread[n][<span class="st">"mean"</span>] <span class="cf">for</span> n <span class="kw">in</span> labels}</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>tools.r_category(</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"slope_class"</span>,</span>
@@ -1028,13 +1034,13 @@ Nearest-cell DoD minus resampled DoD: min -2.18 m, max +2.25 m, std 0.108 m</cod
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>Supported by the U.S. National Science Foundation under award 2606178.</p>
+<p><img src="../site/nsf-logo.png" alt="NSF logo" height="40"> <img src="../site/cga-ncsu-white.png" alt="Center for Geospatial Analytics, NC State University logo" height="40"> Supported by the U.S. National Science Foundation under award 2606178.</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;
     <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ncsu-geoforall-lab/geohazards-workshop/blob/main/notebooks/01_data_and_time.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/ncsu-geoforall-lab/geohazards-workshop/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
-<p>Code GPL-3.0. Text CC BY 4.0.</p>
+<p><a href="https://grass.osgeo.org">grass.osgeo.org</a> | Code GPL-3.0. Text CC BY 4.0.</p>
 </div>
   </div>
 </footer>

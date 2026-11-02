@@ -229,6 +229,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">04 Products for emergency management</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/05_overland_flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">05 Simulating the storm (optional)</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
@@ -281,7 +287,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>Part 02 left a DoD, <code>dod_debiased</code>, whose stable ground is centered near zero with an NMAD of about 8 cm. In this part we turn that noise into a level of detection (LoD), the smallest change we are willing to call real, and see how the choice of LoD changes the volumes.</p>
-<div id="0ad2fb03" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:45:54.317335Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:45:54.317120Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:45:54.658329Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:45:54.657283Z&quot;}}" data-execution_count="1">
+<div id="0ad2fb03" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:04:28.467239Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:04:28.467050Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:04:28.844460Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:04:28.843541Z&quot;}}" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> csv</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> workshop_utils <span class="im">import</span> Tools, gj, rounded, stable_stats, start</span>
@@ -299,7 +305,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="a-single-lod" class="level2">
 <h2 class="anchored" data-anchor-id="a-single-lod">A single LoD</h2>
 <p><em>r.dem.lod</em> <code>method=global</code> estimates the NMAD on stable ground and multiplies it by the normal critical value for the confidence level, 1.96 at 95%.</p>
-<div id="27dd3eb5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:45:54.660205Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:45:54.659976Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:45:57.981122Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:45:57.980221Z&quot;}}" data-execution_count="2">
+<div id="27dd3eb5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:04:28.846500Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:04:28.846284Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:04:32.410762Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:04:32.409757Z&quot;}}" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> report.r_dem_lod(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    dod<span class="op">=</span><span class="st">"dod_debiased"</span>,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    output<span class="op">=</span><span class="st">"lod_global"</span>,</span>
@@ -322,7 +328,7 @@ LoD: 0.1486 m (uniform)</code></pre>
 <section id="a-local-lod-needs-stable-ground-nearby" class="level2">
 <h2 class="anchored" data-anchor-id="a-local-lod-needs-stable-ground-nearby">A local LoD needs stable ground nearby</h2>
 <p><code>method=local</code> estimates the NMAD in a moving window instead. With a stable mask, it only defines the LoD where the window reaches stable cells, and it does not extend it beyond them. Our stable ground is the unburned corner of the region.</p>
-<div id="4a327f00" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:45:57.983857Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:45:57.983674Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:46:53.084872Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:46:53.083842Z&quot;}}" data-execution_count="3">
+<div id="4a327f00" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:04:32.412404Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:04:32.412241Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:05:25.477151Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:05:25.476332Z&quot;}}" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> report.r_dem_lod(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    dod<span class="op">=</span><span class="st">"dod_debiased"</span>,</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    output<span class="op">=</span><span class="st">"lod_local"</span>,</span>
@@ -340,7 +346,7 @@ LoD: 0.1486 m (uniform)</code></pre>
 <section id="an-lod-from-terrain" class="level2">
 <h2 class="anchored" data-anchor-id="an-lod-from-terrain">An LoD from terrain</h2>
 <p>The NMAD grows with slope (part 01), and slope is known everywhere. Estimate the NMAD of the stable residuals by slope class, then assign each cell the NMAD of its slope class. The error model is fit on stable ground and carried to the burn scar by slope, not by distance.</p>
-<div id="5b4b6b02" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:46:53.086470Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:46:53.086305Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:47:02.719272Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:47:02.718292Z&quot;}}" data-execution_count="4">
+<div id="5b4b6b02" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:05:25.478977Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:05:25.478816Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:05:36.527799Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:05:36.526839Z&quot;}}" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>edges <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">90</span>]</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>sigma_by_class <span class="op">=</span> []</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'slope (deg)'</span><span class="sc">:&gt;12}{</span><span class="st">'median'</span><span class="sc">:&gt;10}{</span><span class="st">'NMAD'</span><span class="sc">:&gt;10}{</span><span class="st">'cells'</span><span class="sc">:&gt;10}</span><span class="ss">"</span>)</span>
@@ -373,7 +379,7 @@ LoD: 0.1486 m (uniform)</code></pre>
        40-90    +0.035     0.107     18335</code></pre>
 </div>
 </div>
-<div id="06def795" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:47:02.721032Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:47:02.720856Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:47:03.270559Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:47:03.269676Z&quot;}}" data-execution_count="5">
+<div id="06def795" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:05:36.529539Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:05:36.529377Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:05:37.124177Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:05:37.123230Z&quot;}}" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>lod_map <span class="op">=</span> gj.Map(width<span class="op">=</span><span class="dv">700</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>lod_map.d_rast(<span class="bu">map</span><span class="op">=</span><span class="st">"lod_slope"</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>lod_map.d_vect(</span>
@@ -393,7 +399,7 @@ LoD: 0.1486 m (uniform)</code></pre>
 <section id="significant-change-and-volumes" class="level2">
 <h2 class="anchored" data-anchor-id="significant-change-and-volumes">Significant change and volumes</h2>
 <p><em>r.dem.change</em> keeps the cells whose change exceeds the LoD, removes isolated significant cells with <code>-n</code>, and writes the volumes. It calls lowering erosion and raising deposition.</p>
-<div id="f0ce2250" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:47:03.272342Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:47:03.272184Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:47:12.127762Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:47:12.127154Z&quot;}}" data-execution_count="6">
+<div id="f0ce2250" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:05:37.126134Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:05:37.125949Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:05:45.971043Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:05:45.970139Z&quot;}}" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> volumes(lod, name):</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    tools.r_dem_change(</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        dod<span class="op">=</span><span class="st">"dod_debiased"</span>,</span>
@@ -440,7 +446,7 @@ no LoD           710,000         130,000      -580,000</code></pre>
 <section id="check-the-lod-against-stable-ground" class="level2">
 <h2 class="anchored" data-anchor-id="check-the-lod-against-stable-ground">Check the LoD against stable ground</h2>
 <p>At 95% confidence, about 5% of stable cells should come out significant by chance. Count them.</p>
-<div id="9df01a73" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:47:12.130005Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:47:12.129822Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:47:15.412979Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:47:15.412043Z&quot;}}" data-execution_count="7">
+<div id="9df01a73" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:05:45.972695Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:05:45.972531Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:05:49.601251Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:05:49.600327Z&quot;}}" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, lod <span class="kw">in</span> ((<span class="st">"global"</span>, <span class="st">"lod_global"</span>), (<span class="st">"slope"</span>, <span class="st">"lod_slope"</span>)):</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    tools.r_mapcalc(</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>        expression<span class="op">=</span><span class="ss">f"flagged = if(!isnull(stable) &amp;&amp; !isnull(sig_</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">), 1, null())"</span></span>
@@ -460,7 +466,7 @@ slope  : 10.8% of stable cells flagged significant</code></pre>
 <section id="a-calibrated-lod" class="level2">
 <h2 class="anchored" data-anchor-id="a-calibrated-lod">A calibrated LoD</h2>
 <p>Find the multiple of the slope-class NMAD that only 5% of stable cells exceed, and use it in place of 1.96.</p>
-<div id="c4l1b0d1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:47:15.414615Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:47:15.414449Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:47:21.389017Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:47:21.388018Z&quot;}}" data-execution_count="8">
+<div id="c4l1b0d1" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:05:49.602932Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:05:49.602772Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:05:55.895375Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:05:55.894530Z&quot;}}" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Each stable cell's DoD in units of its slope-class NMAD.</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>tools.r_mapcalc(</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    expression<span class="op">=</span><span class="st">"z_stable = if(!isnull(stable), abs(dod_debiased) / sigma_slope, null())"</span></span>
@@ -500,7 +506,7 @@ no LoD             710,000         130,000      -580,000</code></pre>
 <section id="significance-classes" class="level2">
 <h2 class="anchored" data-anchor-id="significance-classes">Significance classes</h2>
 <p><em>r.dem.errprop</em> turns the slope-based uncertainty into z-scores and classes of confidence for erosion and deposition. The class labels state confidence from the normal model, so read “Erosion &gt;=99%” as strong evidence of lowering, not a literal 99%. Its color table runs from red for confident erosion through white to blue for confident deposition.</p>
-<div id="111744ae" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:47:21.390593Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:47:21.390425Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:47:24.345158Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:47:24.344337Z&quot;}}" data-execution_count="9">
+<div id="111744ae" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:05:55.897169Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:05:55.896988Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:05:59.064800Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:05:59.063743Z&quot;}}" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tools.r_dem_errprop(</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    dod<span class="op">=</span><span class="st">"dod_debiased"</span>,</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    sigma<span class="op">=</span><span class="st">"sigma_slope"</span>,</span>
@@ -521,7 +527,7 @@ no LoD             710,000         130,000      -580,000</code></pre>
 4 Deposition &gt;=99% 148444</code></pre>
 </div>
 </div>
-<div id="efacb0ef" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:47:24.347208Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:47:24.347041Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:47:25.219349Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:47:25.218405Z&quot;}}" data-execution_count="10">
+<div id="efacb0ef" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:05:59.066436Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:05:59.066260Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:05:59.962697Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:05:59.961613Z&quot;}}" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>classes <span class="op">=</span> gj.Map(width<span class="op">=</span><span class="dv">700</span>)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>classes.d_shade(shade<span class="op">=</span><span class="st">"dtm_2022_relief"</span>, color<span class="op">=</span><span class="st">"change_class"</span>)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>classes.d_vect(</span>
@@ -547,7 +553,7 @@ no LoD             710,000         130,000      -580,000</code></pre>
 <section id="your-turn" class="level2">
 <h2 class="anchored" data-anchor-id="your-turn">Your turn</h2>
 <p>Rerun the slope-based LoD at 68%, 95%, and 99% confidence and watch the trade between the volume you keep and the share of stable cells that pass by chance.</p>
-<div id="e8d008e0" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T17:47:25.225619Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T17:47:25.225437Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T17:47:42.431977Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T17:47:42.431167Z&quot;}}" data-execution_count="11">
+<div id="e8d008e0" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:05:59.970033Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:05:59.969847Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:06:17.721889Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:06:17.721015Z&quot;}}" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>z_values <span class="op">=</span> {<span class="st">"68%"</span>: <span class="fl">1.0</span>, <span class="st">"95%"</span>: <span class="fl">1.96</span>, <span class="st">"99%"</span>: <span class="fl">2.576</span>}</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'level'</span><span class="sc">:&gt;6}{</span><span class="st">'erosion m3'</span><span class="sc">:&gt;14}{</span><span class="st">'deposition m3'</span><span class="sc">:&gt;16}{</span><span class="st">'stable flagged'</span><span class="sc">:&gt;16}</span><span class="ss">"</span>)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> level, z <span class="kw">in</span> z_values.items():</span>
@@ -990,13 +996,13 @@ no LoD             710,000         130,000      -580,000</code></pre>
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>Supported by the U.S. National Science Foundation under award 2606178.</p>
+<p><img src="../site/nsf-logo.png" alt="NSF logo" height="40"> <img src="../site/cga-ncsu-white.png" alt="Center for Geospatial Analytics, NC State University logo" height="40"> Supported by the U.S. National Science Foundation under award 2606178.</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;
     <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ncsu-geoforall-lab/geohazards-workshop/blob/main/notebooks/03_lod_and_change.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/ncsu-geoforall-lab/geohazards-workshop/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
-<p>Code GPL-3.0. Text CC BY 4.0.</p>
+<p><a href="https://grass.osgeo.org">grass.osgeo.org</a> | Code GPL-3.0. Text CC BY 4.0.</p>
 </div>
   </div>
 </footer>
