@@ -20,9 +20,9 @@ FOSS4G NA 2026, Sacramento
 
 Corey T. White, Center for Geospatial Analytics, NC State University
 
-![](images/grass-white-horizontal.svg){width="320"} ![](images/nsf-logo.png){height="110" style="margin-left: 2rem;"} ![](images/cga-white.png){height="64" style="margin-left: 2rem;"}
+![](images/grass-white-horizontal.svg){width="320"} ![](images/cga-white.png){height="64" style="margin-left: 2rem;"}
 
-Supported by the U.S. National Science Foundation under award 2606178
+![](images/nsf-logo.png){height="80" style="vertical-align: middle; margin-right: 1rem;"} Supported by the U.S. National Science Foundation under award 2606178
 
 ## Today
 
