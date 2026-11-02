@@ -4,7 +4,7 @@ project:
   output-dir: _site
   resources:
     - site/nsf-logo.png
-    - site/cga-white.png
+    - site/cga-ncsu-white.png
   render:
     - index.qmd
     - SETUP.md
@@ -71,7 +71,7 @@ website:
   page-footer:
     left: >-
       ![](/site/nsf-logo.png){height=40 alt="NSF logo"}
-      ![](/site/cga-white.png){height=30 alt="Center for Geospatial Analytics logo"}
+      ![](/site/cga-ncsu-white.png){height=40 alt="Center for Geospatial Analytics, NC State University logo"}
       Supported by the U.S. National Science Foundation under award 2606178.
     right: "[grass.osgeo.org](https://grass.osgeo.org) | Code GPL-3.0. Text CC BY 4.0."
 

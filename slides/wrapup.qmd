@@ -5,8 +5,9 @@ format:
     theme: [default, grass.scss]
     embed-resources: true
     slide-number: c/t
-    footer: "[Workshop home](../index.qmd) | [grass.osgeo.org](https://grass.osgeo.org)"
+    footer: "[Workshop home](../index.qmd)"
     logo: images/nsf-logo.png
+    include-after-body: grass-corner.html
     width: 1600
     height: 900
     margin: 0.06
