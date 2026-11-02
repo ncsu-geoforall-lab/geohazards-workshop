@@ -13,7 +13,9 @@ from datetime import date
 from pathlib import Path
 
 import matplotlib.dates as mdates
+import matplotlib.patheffects as patheffects
 import matplotlib.pyplot as plt
+from osgeo import ogr, osr
 from PIL import Image
 
 sys.path.append(
@@ -62,35 +64,105 @@ def save_map(name, build, width=1100, region=None, jpeg=True):
     print(f"Wrote {name}.{'jpg' if jpeg else 'png'}")
 
 
-# Location: the HUC12, the focal region, and the fire perimeter.
-tools.g_region(vector="huc12@PERMANENT", res=30, flags="a")
+# Location: a hillshade of the HUC12 from the 3DEP 1/3 arc-second DEM, which
+# covers more than the focal lidar, with the perimeter, streams, and region.
+DEM_13 = (
+    "/vsicurl/https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/13/TIFF/"
+    "current/n42w123/USGS_13_n42w123.tif"
+)
+tools.g_region(vector="huc12@PERMANENT", res=10, flags="a")
+tools.g_region(grow=50)
 tools.g_region(save="huc12_view", overwrite=True)
+tools.r_import(
+    input=DEM_13,
+    output="context_dem",
+    extent="region",
+    resolution="region",
+    resample="bilinear",
+    overwrite=True,
+)
+tools.r_relief(input="context_dem", output="context_relief", overwrite=True)
+# Tint the burned side so inside and outside the perimeter read at a glance.
+tools.v_to_rast(
+    input="mckinney_perimeter@PERMANENT",
+    output="context_burned",
+    use="val",
+    value=1,
+    overwrite=True,
+)
+tools.r_colors(map="context_burned", rules=io.StringIO("1 245:175:160\n"))
 tools.g_region(region="focal@PERMANENT")
 save_map(
     "location",
     lambda m: (
-        m.d_vect(map="huc12@PERMANENT", fill_color="240:240:241", color="none"),
-        m.d_vect(
-            map="mckinney_perimeter@PERMANENT",
-            fill_color="246:206:200",
-            color="194:64:47",
-            width=2,
-        ),
+        m.d_rast(map="context_relief"),
+        m.d_shade(shade="context_relief", color="context_burned"),
+        m.d_vect(map="huc12@PERMANENT", fill_color="none", color="0:57:63", width=3),
         m.d_vect(
             map="nhd_flowlines@PERMANENT",
             where="gnis_name IN ('Humbug Creek', 'Klamath River')",
             color="47:109:181",
-            width=2,
+            width=3,
         ),
-        m.d_vect(map="huc12@PERMANENT", fill_color="none", color="0:57:63", width=3),
+        m.d_vect(
+            map="mckinney_perimeter@PERMANENT",
+            fill_color="none",
+            color="194:64:47",
+            width=3,
+        ),
         m.d_vect(
             map="focal_aoi@PERMANENT", fill_color="none", color="8:139:54", width=4
         ),
     ),
-    width=800,
+    width=900,
     region="huc12_view",
-    jpeg=False,
 )
+
+# California inset: where the fire is relative to Sacramento.
+STATES = (
+    "/vsizip//vsicurl/https://www2.census.gov/geo/tiger/GENZ2023/shp/"
+    "cb_2023_us_state_20m.zip"
+)
+states = ogr.Open(STATES)
+layer = states.GetLayer()
+layer.SetAttributeFilter("STUSPS = 'CA'")
+feature = layer.GetNextFeature()  # keep the feature alive while cloning
+california = feature.GetGeometryRef().Clone()
+geographic = osr.SpatialReference()
+geographic.ImportFromEPSG(4269)
+albers = osr.SpatialReference()
+albers.ImportFromEPSG(3310)  # California Albers
+for ref in (geographic, albers):
+    ref.SetAxisMappingStrategy(osr.OAMS_TRADITIONAL_GIS_ORDER)
+to_albers = osr.CoordinateTransformation(geographic, albers)
+california.Transform(to_albers)
+
+fig, ax = plt.subplots(figsize=(3.2, 3.8))
+for polygon in california:
+    ring = polygon.GetGeometryRef(0)
+    xs, ys = zip(*[ring.GetPoint_2D(i) for i in range(ring.GetPointCount())])
+    ax.fill(xs, ys, facecolor="#f0f0f1", edgecolor=INK, linewidth=0.8)
+places = (
+    ("McKinney Fire", -122.735, 41.782, FIRE, "o"),
+    ("Sacramento", -121.494, 38.582, INK, "s"),
+)
+for label, lon, lat, color, marker in places:
+    x, y, _ = to_albers.TransformPoint(lon, lat)
+    ax.plot(x, y, marker=marker, markersize=9, color=color, markeredgecolor="white")
+    ax.annotate(
+        label,
+        (x, y),
+        xytext=(8, -4),
+        textcoords="offset points",
+        fontsize=12,
+        path_effects=[patheffects.withStroke(linewidth=3, foreground="white")],
+    )
+ax.set_aspect("equal")
+ax.axis("off")
+fig.tight_layout()
+fig.savefig(OUT / "california.png", dpi=200, transparent=True, bbox_inches="tight")
+plt.close(fig)
+print("Wrote california.png")
 
 save_map(
     "focal",

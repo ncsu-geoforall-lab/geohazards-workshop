@@ -38,14 +38,18 @@ Every notebook starts from a checkpoint, so you can rejoin at any block.
 ## Humbug Creek, California
 
 :::: {.columns}
-::: {.column width="48%"}
-![](figures/location.png){width="100%"}
+::: {.column width="58%"}
+![](figures/location.jpg){width="100%"}
 :::
-::: {.column width="52%"}
-- A tributary of the Klamath River in Siskiyou County, HUC12 180102060801, 96 km²
-- Red: the 2022 McKinney Fire perimeter
-- Blue: Humbug Creek and the Klamath River, from the USGS NHD
-- Green: our 3.0 x 2.2 km study region, across the fire control line
+::: {.column width="42%"}
+![](figures/california.png){width="48%"}
+
+- Klamath River tributary in Siskiyou County, a 96 km² watershed
+- Red: burned in the 2022 McKinney Fire
+- Blue: Humbug Creek and the Klamath River
+- Green: our 3.0 x 2.2 km study region
+
+[HUC12 180102060801. Hillshade from the USGS 3DEP 1/3 arc-second DEM. Streams from the USGS NHD.]{.source}
 :::
 ::::
 
