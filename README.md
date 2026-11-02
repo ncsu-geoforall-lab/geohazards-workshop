@@ -16,6 +16,9 @@ Codespaces, or locally in the same container.
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/ncsu-geoforall-lab/geohazards-workshop)
 
+Workshop site with rendered notebooks and slides:
+<https://ncsu-geoforall-lab.github.io/geohazards-workshop/>
+
 ## Learning objectives
 
 By the end of the workshop you will be able to:

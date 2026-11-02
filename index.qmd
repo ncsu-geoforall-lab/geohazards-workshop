@@ -1,0 +1,8 @@
+---
+pagetitle: "Geohazard Change Detection for Emergency Management with GRASS"
+toc: false
+# Keep the Codespaces badge an inline image, not a captioned figure.
+from: markdown-implicit_figures
+---
+
+{{< include README.md >}}
