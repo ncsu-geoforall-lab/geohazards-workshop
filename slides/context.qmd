@@ -75,6 +75,17 @@ Four days after ignition, monsoonal moisture built a convective thunderstorm ove
 
 [Curtis, J.A., et al., 2025. 2022 McKinney rain-on-wildfire event, dissolved oxygen sags, and a fish kill on the Klamath River, California. Scientific Reports 15, 24668. https://doi.org/10.1038/s41598-025-08179-9]{.source}
 
+## A cascading hazard
+
+Each step set up the next one.
+
+1. **Fire, 29 July.** 83% of the burned area was moderate to high severity.
+2. **Storm, 2 August.** The trigger. More than 100 mm in 3 hours exceeded what the fire-affected soils could absorb.
+3. **Debris flows and channel change.** Rill and gully erosion, scoured channels, and debris fans. This is what the DoD measures.
+4. **Downstream impacts.** Sediment-laden flooding reached the Klamath River. Dissolved oxygen fell to zero for 5.25 hours 71 km downstream, and fish died along 95 km of the river.
+
+[Curtis et al. (2025).]{.source}
+
 ## Two lidar surveys
 
 ![](figures/timeline.png){width="100%"}
@@ -136,6 +147,7 @@ The smallest change we will call real, at 95% confidence.
 - LoD = 1.96 x NMAD of the DoD on stable ground
 - Error grows with slope, from an NMAD of 6 cm below 10 degrees to 11 cm above 40 degrees
 - About 11% of stable cells pass a nominal 95% limit, so the limit is optimistic
+- Calibrated so that 5% of stable cells pass, the multiplier is 2.9 instead of 1.96, and net lowering drops by about 40%
 
 ## Where we are headed: significant change
 

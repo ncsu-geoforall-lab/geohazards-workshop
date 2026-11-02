@@ -32,3 +32,4 @@ slides/.quarto/
 notebooks/*_transform*.txt
 notebooks/bias_fit.json
 notebooks/volumes_*.csv
+notebooks/exports/

@@ -21,13 +21,13 @@ Codespaces, or locally in the same container.
 By the end of the workshop you will be able to:
 
 1. Compute a DoD between two lidar epochs and explain where it misleads.
-2. Find and correct horizontal and vertical datum and co-registration
-   offsets using stable terrain.
+2. Measure and remove the horizontal and vertical offset between two surveys
+   on stable terrain, and decide when a datum transform helps.
 3. Estimate a level of detection (LoD) and apply a spatially variable
    threshold instead of a single value.
 4. Organize multi-date elevation data with the GRASS temporal framework.
-5. Turn significant change into volumes and hazard maps by burn severity and
-   subwatershed.
+5. Turn significant change into volumes and post-event change maps by burn
+   severity and subwatershed, and export them for desktop GIS.
 
 ## Schedule
 
@@ -40,7 +40,7 @@ By the end of the workshop you will be able to:
 | 14:45 | Break | |
 | 14:55 | Level of detection and significant change | [03_lod_and_change](notebooks/03_lod_and_change.ipynb) |
 | 15:30 | Products for emergency management | [04_hazard_products](notebooks/04_hazard_products.ipynb) |
-| 15:50 | Wrap-up and questions | |
+| 15:50 | Wrap-up and adapting the workflow to your area | [slides](slides/wrapup.qmd) |
 
 Each notebook starts by loading a checkpoint, so you can rejoin at any block.
 If you fall behind, open the next notebook and run all cells. It picks up the
