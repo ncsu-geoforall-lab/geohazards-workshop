@@ -11,6 +11,8 @@ quarto render slides/context.qmd
 quarto render slides/wrapup.qmd
 ```
 
+The files land in `_site/slides/`, because the repo is a Quarto website.
+
 The figures in `figures/` are committed, so rendering does not need the
 workshop data. To rebuild them, run notebooks 01 to 04 in the workshop mapset,
 then from the repo root inside the devcontainer:
