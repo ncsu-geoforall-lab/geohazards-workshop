@@ -31,5 +31,6 @@ format:
 - Materials: <https://github.com/ncsu-geoforall-lab/geohazards-workshop>
 - r.dem 1.1.0: [10.5281/zenodo.23719842](https://doi.org/10.5281/zenodo.23719842)
 - Questions and bugs: issues on the workshop repository or OSGeo/grass-addons
+- The same chain after Hurricane Helene, on SfM surfaces from Civil Air Patrol imagery: White et al. (2026), *Remote Sensing* 18, 3766, [10.3390/rs18213766](https://doi.org/10.3390/rs18213766)
 
 ![](images/grass-green-horizontal.svg){width="280"}
