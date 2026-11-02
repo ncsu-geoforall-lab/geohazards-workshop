@@ -114,6 +114,23 @@ Each step set up the next one.
 
 [Sentinel-2 true color, one color stretch for both dates. Contains modified Copernicus Sentinel data 2022.]{.source}
 
+## Simulating the peak of the storm
+
+:::: {.columns}
+::: {.column width="50%"}
+![](figures/storm_prefire.gif){width="100%"}
+
+Before the fire
+:::
+::: {.column width="50%"}
+![](figures/storm_postfire.gif){width="100%"}
+
+After the fire, about five times the peak discharge
+:::
+::::
+
+[*r.sim.water*, 100 mm/h for 30 minutes on 10 m land cover and burn severity. Roughness and infiltration are illustrative. Optional notebook 05.]{.source}
+
 ## Two lidar surveys
 
 ![](figures/timeline.png){width="100%"}
