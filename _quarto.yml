@@ -70,9 +70,9 @@ website:
         href: https://github.com/ncsu-geoforall-lab/geohazards-workshop
   page-footer:
     left: >-
-      ![](/site/nsf-logo.png){height=40 alt="NSF logo"}
-      ![](/site/cga-ncsu-white.png){height=40 alt="Center for Geospatial Analytics, NC State University logo"}
-      Supported by the U.S. National Science Foundation under award 2606178.
+      ![](/site/nsf-logo.png){height=48 alt="NSF logo"}
+      ![](/site/cga-ncsu-white.png){height=48 alt="Center for Geospatial Analytics, NC State University logo"}
+    center: "Supported by the U.S. National Science Foundation under award 2606178."
     right: "[grass.osgeo.org](https://grass.osgeo.org) | Code GPL-3.0. Text CC BY 4.0."
 
 format:

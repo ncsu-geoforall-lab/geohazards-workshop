@@ -6,7 +6,7 @@ format:
     embed-resources: true
     slide-number: c/t
     footer: '[Workshop home](../index.qmd) ![](images/cga-ncsu.png){.on-light height="38"} ![](images/cga-ncsu-white.png){.on-dark height="38"} ![](images/nsf-logo.png){height="38"}'
-    include-after-body: grass-corner.html
+    include-after-body: includes/grass-corner.html
     width: 1600
     height: 900
     margin: 0.06

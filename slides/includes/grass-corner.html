@@ -1,0 +1,11 @@
+<a class="grass-corner" href="https://grass.osgeo.org" title="grass.osgeo.org">
+  <img class="on-light" src="images/grass-green-no-text.svg" alt="GRASS">
+  <img class="on-dark" src="images/grass-white-no-text.svg" alt="GRASS">
+</a>
+<script>
+  // Quarto lazy-loads the footer images, and Reveal only loads lazy images
+  // inside slides, so load them here.
+  document.querySelectorAll(".reveal .footer img[data-src]").forEach((img) => {
+    img.src = img.dataset.src;
+  });
+</script>

@@ -12,6 +12,7 @@ $gs-white-color: #f7f7f7;
 $gs-black-color: #021905;
 $gs-grey-color: #91908f;
 $gs-grey-light-color: #f0f0f1;
+$gs-grey-dark-color: #4e4d4c;
 
 $font-family-sans-serif: "Fira Sans", sans-serif;
 $font-family-monospace: "Fira Mono", monospace;
@@ -102,6 +103,11 @@ $code-bg: $gs-grey-light-color;
   top: 1rem !important;
   bottom: auto !important;
   right: 1.2rem !important;
+  color: $gs-grey-dark-color !important;
+}
+
+.reveal.has-dark-background .slide-number {
+  color: $gs-white-color !important;
 }
 
 // Footer logos: the dark lockup on light slides, the white one on dark slides.
