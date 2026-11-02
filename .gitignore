@@ -37,3 +37,5 @@ notebooks/exports/
 # Quarto site, built by .github/workflows/site.yml
 /.quarto/
 _site/
+
+**/*.quarto_ipynb

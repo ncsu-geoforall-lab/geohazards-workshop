@@ -36,6 +36,8 @@ Corey T. White, Center for Geospatial Analytics, NC State University
 
 Every notebook starts from a checkpoint, so you can rejoin at any block.
 
+The abstract named Hurricane Helene as the main case. Today is all Humbug Creek, and the Helene version of the same workflow is in the wrap-up.
+
 ## Humbug Creek, California
 
 :::: {.columns}
