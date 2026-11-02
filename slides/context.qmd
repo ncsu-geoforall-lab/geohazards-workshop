@@ -5,7 +5,8 @@ format:
     theme: [default, grass.scss]
     embed-resources: true
     slide-number: c/t
-    footer: "[Workshop home](../index.qmd)"
+    footer: "[Workshop home](../index.qmd) | [grass.osgeo.org](https://grass.osgeo.org)"
+    logo: images/nsf-logo.png
     width: 1600
     height: 900
     margin: 0.06
@@ -19,7 +20,9 @@ FOSS4G NA 2026, Sacramento
 
 Corey T. White, Center for Geospatial Analytics, NC State University
 
-![](images/grass-white-horizontal.svg){width="320"}
+![](images/grass-white-horizontal.svg){width="320"} ![](images/nsf-logo.png){height="110" style="margin-left: 2rem;"} ![](images/cga-white.png){height="64" style="margin-left: 2rem;"}
+
+Supported by the U.S. National Science Foundation under award 2606178
 
 ## Today
 
@@ -221,7 +224,7 @@ Materials: <https://github.com/ncsu-geoforall-lab/geohazards-workshop>
 - Supported by the U.S. National Science Foundation under award 2606178
 - Data from USFS Region 5 and OpenTopography ([10.5069/G9FJ2F12](https://doi.org/10.5069/G9FJ2F12)), USGS 3DEP, USGS NHD, MTBS, and modified Copernicus Sentinel data 2022
 
-![](images/grass-green-horizontal.svg){width="280"}
+![](images/grass-green-horizontal.svg){width="280"} ![](images/cga-black.png){height="56" style="margin-left: 2rem;"}
 
 ## Let's start
 

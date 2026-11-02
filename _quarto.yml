@@ -2,6 +2,9 @@
 project:
   type: website
   output-dir: _site
+  resources:
+    - site/nsf-logo.png
+    - site/cga-white.png
   render:
     - index.qmd
     - SETUP.md
@@ -10,6 +13,7 @@ project:
     - notebooks/02_coregister_and_bias.ipynb
     - notebooks/03_lod_and_change.ipynb
     - notebooks/04_hazard_products.ipynb
+    - notebooks/05_overland_flow.ipynb
     - slides/context.qmd
     - slides/wrapup.qmd
     - data/README.md
@@ -43,6 +47,8 @@ website:
             text: "03 Level of detection and change"
           - href: notebooks/04_hazard_products.ipynb
             text: "04 Products for emergency management"
+          - href: notebooks/05_overland_flow.ipynb
+            text: "05 Simulating the storm (optional)"
       - href: data/README.md
         text: Data
   navbar:
@@ -63,8 +69,11 @@ website:
       - icon: github
         href: https://github.com/ncsu-geoforall-lab/geohazards-workshop
   page-footer:
-    left: "Supported by the U.S. National Science Foundation under award 2606178."
-    right: "Code GPL-3.0. Text CC BY 4.0."
+    left: >-
+      ![](/site/nsf-logo.png){height=40 alt="NSF logo"}
+      ![](/site/cga-white.png){height=30 alt="Center for Geospatial Analytics logo"}
+      Supported by the U.S. National Science Foundation under award 2606178.
+    right: "[grass.osgeo.org](https://grass.osgeo.org) | Code GPL-3.0. Text CC BY 4.0."
 
 format:
   html:
