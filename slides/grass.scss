@@ -76,10 +76,10 @@ $code-bg: $gs-grey-light-color;
   max-height: 3.4rem !important;
 }
 
-// GRASS mark linking to grass.osgeo.org, top right of every slide.
+// GRASS mark linking to grass.osgeo.org, bottom right of every slide.
 .grass-corner {
   position: fixed;
-  top: 0.8rem;
+  bottom: 0.7rem;
   right: 1rem;
   z-index: 30;
 }
@@ -97,9 +97,24 @@ $code-bg: $gs-grey-light-color;
   display: inline;
 }
 
-// Keep the slide number clear of the GRASS mark, next to the NSF logo.
+// Slide number in the top right, clear of the GRASS mark.
 .reveal .slide-number {
-  top: auto !important;
-  bottom: 1.2rem !important;
-  right: 5rem !important;
+  top: 1rem !important;
+  bottom: auto !important;
+  right: 1.2rem !important;
+}
+
+// Footer logos: the dark lockup on light slides, the white one on dark slides.
+.reveal .footer img {
+  vertical-align: middle;
+  margin-left: 1rem;
+}
+
+.reveal .footer .on-dark,
+.reveal.has-dark-background .footer .on-light {
+  display: none;
+}
+
+.reveal.has-dark-background .footer .on-dark {
+  display: inline;
 }
