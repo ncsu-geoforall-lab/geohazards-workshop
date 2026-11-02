@@ -112,7 +112,26 @@ approximate classes for this Sentinel-2 initial assessment.
 The build falls back to a local perimeter (`--perimeter`) when the USFS MTBS
 service is unavailable.
 
+## True color
+
+`s2_pre_red`, `s2_pre_green`, `s2_pre_blue` and the matching `s2_post_*`
+rasters in PERMANENT are the 10 m red, green, and blue bands (B04, B03, B02)
+of the same two Sentinel-2 scenes, as reflectance x 10000. Every band of both
+dates has the same linear color table, black at 0 and white at 0.2
+reflectance, so `d.rgb` shows both dates on one scale. The 98th percentile of
+the post-fire red band is 0.2.
+
 Contains modified Copernicus Sentinel data 2022.
+
+## Streams
+
+`nhd_flowlines` in PERMANENT holds the USGS National Hydrography Dataset
+large-scale flowlines over the HUC12 bounding box, with `gnis_name`, `ftype`,
+`fcode`, and `lengthkm`. `scripts/prepare_data.py` fetches them from the NHD
+map service (layer 6) and keeps the GeoJSON in `raw/nhd_flowlines.geojson`.
+The build falls back to a local copy (`--flowlines`) when the service is
+unavailable. The notebooks still derive channels from the 2022 DTM for the
+analysis. The NHD lines are for orientation.
 
 ## References
 
@@ -124,3 +143,6 @@ Contains modified Copernicus Sentinel data 2022.
   Schenk, L.N., Oberholzer, J.R., 2025. 2022 McKinney rain-on-wildfire event,
   dissolved oxygen sags, and a fish kill on the Klamath River, California.
   Scientific Reports 15, 24668. <https://doi.org/10.1038/s41598-025-08179-9>
+- U.S. Geological Survey. National Hydrography Dataset (NHD), large-scale
+  flowlines. <https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer>.
+  Accessed 2026-11-01

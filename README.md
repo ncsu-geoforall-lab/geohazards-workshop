@@ -60,8 +60,9 @@ required.
 
 ## Data
 
-Lidar from the USFS (2013) and USGS 3DEP (2018, 2022). Sources, collection
-dates, and datums are in [data/README.md](data/README.md).
+Lidar from the USFS (2013) and USGS 3DEP (2022), Sentinel-2 imagery from
+2022, and USGS NHD stream lines. Sources, collection dates, and datums are in
+[data/README.md](data/README.md).
 
 ## Acknowledgments
 
