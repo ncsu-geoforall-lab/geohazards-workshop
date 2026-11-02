@@ -283,7 +283,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>Part 01 ended with a naive DoD that reads about 10 cm high on ground that did not burn, with a color pattern on the hillslopes that follows aspect. In this part we measure that error on stable ground, remove the offset between the two lidar collections with <em>r.dem.nk</em>, and check whether pre-fire vegetation leaves a bias worth correcting.</p>
-<div id="45042254" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:09:46.027427Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:09:46.027226Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:09:47.557356Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:09:47.556222Z&quot;}}" data-execution_count="1">
+<div id="45042254" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:59:19.596988Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:59:19.596777Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:59:21.102085Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:59:21.100959Z&quot;}}" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> io</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -302,7 +302,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="stable-ground" class="level2">
 <h2 class="anchored" data-anchor-id="stable-ground">Stable ground</h2>
 <p>Every correction in this part is estimated on ground we expect did not change between 2013 and 2022. Here that means cells that are outside the fire perimeter, sloped between 2 and 45 degrees, and more than 10 m from a channel, since channels carry real deposition and scour.</p>
-<div id="e87def23" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:09:47.559363Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:09:47.559098Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:09:53.917093Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:09:53.916175Z&quot;}}" data-execution_count="2">
+<div id="e87def23" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:59:21.103839Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:59:21.103598Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:59:27.288722Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:59:27.287827Z&quot;}}" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>tools.r_watershed(elevation<span class="op">=</span><span class="st">"dtm_2022"</span>, threshold<span class="op">=</span><span class="dv">10000</span>, stream<span class="op">=</span><span class="st">"streams"</span>, flags<span class="op">=</span><span class="st">"a"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>tools.r_grow_distance(<span class="bu">input</span><span class="op">=</span><span class="st">"streams"</span>, distance<span class="op">=</span><span class="st">"stream_distance"</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>tools.r_mapcalc(</span>
@@ -323,7 +323,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Stable cells: 782568 (12.1% of the region)</code></pre>
 </div>
 </div>
-<div id="541e8b90" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:09:53.918937Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:09:53.918749Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:09:54.915765Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:09:54.914905Z&quot;}}" data-execution_count="3">
+<div id="541e8b90" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:59:27.290618Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:59:27.290317Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:59:28.284009Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:59:28.283048Z&quot;}}" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>stable_map <span class="op">=</span> gj.Map(width<span class="op">=</span><span class="dv">700</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>stable_map.d_rast(<span class="bu">map</span><span class="op">=</span><span class="st">"dtm_2022_relief"</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>stable_map.d_rast(<span class="bu">map</span><span class="op">=</span><span class="st">"stable"</span>)</span>
@@ -341,7 +341,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Now the numbers to beat. The median is the systematic offset and the NMAD (normalized median absolute deviation) is the noise, both measured where the true change should be zero.</p>
-<div id="c5d9d0f5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:09:54.919250Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:09:54.919068Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:09:56.342307Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:09:56.341335Z&quot;}}" data-execution_count="4">
+<div id="c5d9d0f5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:59:28.287831Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:59:28.287634Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:59:29.754392Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:59:29.753433Z&quot;}}" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>before <span class="op">=</span> stable_stats(tools, <span class="st">"dod_naive"</span>, <span class="st">"stable"</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"Naive DoD on stable ground: median </span><span class="sc">{</span>before[<span class="st">'median'</span>]<span class="sc">:+.3f}</span><span class="ss"> m, NMAD </span><span class="sc">{</span>before[<span class="st">'nmad'</span>]<span class="sc">:.3f}</span><span class="ss"> m"</span></span>
@@ -354,7 +354,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="horizontal-and-vertical-offset" class="level2">
 <h2 class="anchored" data-anchor-id="horizontal-and-vertical-offset">Horizontal and vertical offset</h2>
 <p>A horizontal shift between two DEMs shows up as an elevation error that depends on slope and aspect. <em>r.dem.nk</em> fits the Nuth and Kaab (2011) model to that pattern on the stable cells and returns the shift. We align the 2013 DTM to the 2022 reference, since the 2022 collection is the newer, higher-specification survey.</p>
-<div id="269166aa" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:09:56.343958Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:09:56.343776Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:09:57.869767Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:09:57.868492Z&quot;}}" data-execution_count="5">
+<div id="269166aa" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:59:29.756147Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:59:29.755946Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:59:31.290239Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:59:31.289354Z&quot;}}" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sfm= is the surface to move, here the 2013 lidar DTM, and lidar= is the</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># reference it is aligned to.</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>tools.r_dem_nk(</span>
@@ -384,7 +384,7 @@ Horizontal shift: 0.05 m</code></pre>
 <p>The horizontal shift is about 5 cm, a twentieth of a cell. In a nearest-cell DoD the same fit finds about 0.35 m, almost all of it the grid offset that part 01 resampled away. The vertical offset of about 9 cm is larger than the 2 to 3 cm geoid difference from part 01, so the geoid change explains only part of it. An iterative closest point fit with <em>r.dem.icp</em> on the same mask points the same way, with about 8 cm horizontal and 10 cm vertical. The two methods differ by about 3 cm, close to the size of the horizontal shift itself, so the vertical offset is well resolved and the horizontal one is small and uncertain.</p>
 <p>The small shift also settles the datum question from part 01. If the 2013 data were on the original NAD83, the fit would find a shift near 0.6 m. It finds 5 cm, so applying the NADCON5 grid shift would have added error, not removed it.</p>
 <p>Difference the aligned 2013 DTM against 2022 with <em>r.dem.dod</em>. Both DoDs use <code>range=1</code> so they share one color scale.</p>
-<div id="1c33ca63" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:09:57.871460Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:09:57.871294Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:10:00.529267Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:10:00.528326Z&quot;}}" data-execution_count="6">
+<div id="1c33ca63" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:59:31.291962Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:59:31.291774Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:59:34.021910Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:59:34.021027Z&quot;}}" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>tools.r_dem_dod(dem<span class="op">=</span><span class="st">"dtm_2022"</span>, reference<span class="op">=</span><span class="st">"dtm_2013_nk"</span>, output<span class="op">=</span><span class="st">"dod_nk"</span>, <span class="bu">range</span><span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>after <span class="op">=</span> stable_stats(tools, <span class="st">"dod_nk"</span>, <span class="st">"stable"</span>)</span>
@@ -397,36 +397,80 @@ naive           +0.097     0.078
 r.dem.nk        +0.009     0.075</code></pre>
 </div>
 </div>
-<div id="87546f2f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:10:00.530996Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:10:00.530817Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:10:01.942720Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:10:01.941907Z&quot;}}" data-execution_count="7">
+<div class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:59:34.023598Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:59:34.023424Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:59:35.414269Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:59:35.413441Z&quot;}}" data-layout="[[1,1],[1]]" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> (<span class="st">"dod_naive"</span>, <span class="st">"dod_nk"</span>):</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    dod_map <span class="op">=</span> gj.Map(width<span class="op">=</span><span class="dv">500</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    dod_map.d_shade(shade<span class="op">=</span><span class="st">"dtm_2022_relief"</span>, color<span class="op">=</span>name)</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    dod_map.d_vect(</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="bu">map</span><span class="op">=</span><span class="st">"mckinney_perimeter@PERMANENT"</span>, fill_color<span class="op">=</span><span class="st">"none"</span>, color<span class="op">=</span><span class="st">"black"</span>, width<span class="op">=</span><span class="dv">2</span></span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    dod_map.d_legend(</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        raster<span class="op">=</span>name, title<span class="op">=</span><span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> (m)"</span>, <span class="bu">range</span><span class="op">=</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>), at<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">40</span>, <span class="dv">2</span>, <span class="dv">5</span>), flags<span class="op">=</span><span class="st">"b"</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    dod_map.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="02_coregister_and_bias_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    dod_map.show()</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># One legend for both maps.</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>legend <span class="op">=</span> gj.Map(width<span class="op">=</span><span class="dv">1000</span>, height<span class="op">=</span><span class="dv">110</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>legend.d_legend(</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    raster<span class="op">=</span><span class="st">"dod_nk"</span>,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">"DoD (m)"</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">range</span><span class="op">=</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    at<span class="op">=</span>(<span class="dv">35</span>, <span class="dv">65</span>, <span class="dv">5</span>, <span class="dv">95</span>),</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    flags<span class="op">=</span><span class="st">"st"</span>,</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    fontsize<span class="op">=</span><span class="dv">14</span>,</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    title_fontsize<span class="op">=</span><span class="dv">16</span>,</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>legend.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="fig-dod-compare" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dod-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-dod-compare" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-dod-compare-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-dod-compare-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_coregister_and_bias_files/figure-html/fig-dod-compare-output-1.png" class="img-fluid figure-img" data-ref-parent="fig-dod-compare">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-dod-compare-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Naive DoD
+</figcaption>
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="02_coregister_and_bias_files/figure-html/cell-8-output-2.png" class="img-fluid figure-img"></p>
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-dod-compare" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-dod-compare-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-dod-compare-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_coregister_and_bias_files/figure-html/fig-dod-compare-output-2.png" class="img-fluid figure-img" data-ref-parent="fig-dod-compare">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-dod-compare-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) After r.dem.nk
+</figcaption>
 </figure>
 </div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-dod-compare" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div id="fig-dod-compare-3" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-dod-compare-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_coregister_and_bias_files/figure-html/fig-dod-compare-output-3.png" class="img-fluid figure-img" data-ref-parent="fig-dod-compare">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-dod-compare-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c) Legend for both maps
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dod-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: The DoD before and after co-registration, on one color scale
+</figcaption>
+</figure>
 </div>
 </div>
 <p>The median drops from about +0.10 to +0.01 m, while the NMAD barely moves. A vertical offset moves every cell by the same amount, and the horizontal shift is small, so removing them recenters the error without narrowing it.</p>
 <p>All of the stable ground sits in the eastern part of the region, and much of the burn lies west of it. The offsets are fit there and applied everywhere. A tilt between the two surveys would not show up in this fit and would grow with distance from the stable ground, so keep that in mind when reading the volumes in parts 03 and 04.</p>
 <p>To check the horizontal part, plot the stable-ground error divided by the tangent of slope against aspect. A horizontal shift traces a cosine in this plot, and a vertical offset lifts the whole curve.</p>
-<div id="d592d5e5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:10:01.946479Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:10:01.946310Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:10:04.662515Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:10:04.661092Z&quot;}}" data-execution_count="8">
+<div id="d592d5e5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:59:35.416146Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:59:35.415932Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:59:38.087991Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:59:38.086884Z&quot;}}" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>tools.r_slope_aspect(</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    elevation<span class="op">=</span><span class="st">"dtm_2022"</span>, slope<span class="op">=</span><span class="st">"slope_2022"</span>, aspect<span class="op">=</span><span class="st">"aspect_2022"</span>, flags<span class="op">=</span><span class="st">"n"</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -465,7 +509,7 @@ r.dem.nk        +0.009     0.075</code></pre>
 <section id="vegetation" class="level2">
 <h2 class="anchored" data-anchor-id="vegetation">Vegetation</h2>
 <p>Pre-fire canopy can bias a DTM. Dense canopy leaves fewer ground returns, so the 2013 bare-earth surface is interpolated over larger gaps than the 2022 surface flown after the fire. The 2013 highest-hit surface minus the bare-earth surface gives canopy height. A few highest-hit returns are blunders hundreds of meters up, so heights above 70 m are dropped.</p>
-<div id="f6255ae6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:10:04.664258Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:10:04.664093Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:10:12.309426Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:10:12.308549Z&quot;}}" data-execution_count="9">
+<div id="f6255ae6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:59:38.089722Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:59:38.089551Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:59:45.705635Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:59:45.704657Z&quot;}}" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>tools.r_import(</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">input</span><span class="op">=</span><span class="bu">str</span>(RAW <span class="op">/</span> <span class="st">"usfs_2013_dsm.tif"</span>), output<span class="op">=</span><span class="st">"dsm_2013_native"</span>, extent<span class="op">=</span><span class="st">"region"</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -505,7 +549,7 @@ burned forest  median -0.115 m, NMAD 0.111 m, cells 2349146</code></pre>
 </div>
 <p>On stable ground, forest and open cells differ by about 2 cm. Burned forest reads about 12 cm lower, which is change we want to keep.</p>
 <p><em>r.dem.bias</em> <code>method=forest</code> estimates a local median under a canopy mask and subtracts it. Applied to burned forest, it would remove that 12 cm along with any bias, because a local median cannot tell the two apart. <code>method=regression</code> instead fits the bias to terrain and canopy predictors on stable ground only and predicts it everywhere, which keeps real change out of the fit.</p>
-<div id="230094bb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:10:12.311192Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:10:12.311018Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:10:18.420993Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:10:18.420124Z&quot;}}" data-execution_count="10">
+<div id="230094bb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:59:45.707405Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:59:45.707219Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:59:51.855934Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:59:51.854790Z&quot;}}" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tools.r_dem_bias(</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    dod<span class="op">=</span><span class="st">"dod_nk"</span>,</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    output<span class="op">=</span><span class="st">"dod_debiased"</span>,</span>
@@ -539,7 +583,7 @@ Stable ground after regression: median +0.004 m, NMAD 0.076 m</code></pre>
 <h2 class="anchored" data-anchor-id="your-turn">Your turn</h2>
 <p>The stable mask decides what <em>r.dem.nk</em> sees. Rebuild it without the burn and channel conditions, rerun <em>r.dem.nk</em>, and compare the offsets with the ones above. Change and channels pull the fit toward the real surface change.</p>
 <p>Then solve the same alignment with <em>r.dem.icp</em>, which matches the surfaces point to plane instead of fitting the aspect pattern. Its signs are reversed because it reports the transform applied to the 2013 DTM.</p>
-<div id="510cd597" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:10:18.422702Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:10:18.422500Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:10:20.571771Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:10:20.570618Z&quot;}}" data-execution_count="11">
+<div id="510cd597" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:59:51.857670Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:59:51.857479Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:59:53.988534Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:59:53.987597Z&quot;}}" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>tools.r_mapcalc(</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    expression<span class="op">=</span><span class="st">"stable_loose = if(slope_2013 &gt;= 2 &amp;&amp; slope_2013 &lt;= 45, 1, null())"</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -559,7 +603,7 @@ dy=-0.0926471978
 </code></pre>
 </div>
 </div>
-<div id="656e04da" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:10:20.573395Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:10:20.573213Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:10:21.792445Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:10:21.791604Z&quot;}}" data-execution_count="12">
+<div id="656e04da" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:59:53.990176Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:59:53.989957Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:59:55.195320Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:59:55.194510Z&quot;}}" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>tools.r_dem_icp(</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    reference<span class="op">=</span><span class="st">"dtm_2022"</span>,</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    source<span class="op">=</span><span class="st">"dtm_2013"</span>,</span>
@@ -1001,11 +1045,11 @@ pitch=0.0000000000
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p><img src="../site/nsf-logo.png" alt="NSF logo" height="40"> <img src="../site/cga-ncsu-white.png" alt="Center for Geospatial Analytics, NC State University logo" height="40"> Supported by the U.S. National Science Foundation under award 2606178.</p>
+<p><img src="../site/nsf-logo.png" alt="NSF logo" height="48"> <img src="../site/cga-ncsu-white.png" alt="Center for Geospatial Analytics, NC State University logo" height="48"></p>
 </div>   
     <div class="nav-footer-center">
-      &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ncsu-geoforall-lab/geohazards-workshop/blob/main/notebooks/02_coregister_and_bias.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/ncsu-geoforall-lab/geohazards-workshop/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+<p>Supported by the U.S. National Science Foundation under award 2606178.</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ncsu-geoforall-lab/geohazards-workshop/blob/main/notebooks/02_coregister_and_bias.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/ncsu-geoforall-lab/geohazards-workshop/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p><a href="https://grass.osgeo.org">grass.osgeo.org</a> | Code GPL-3.0. Text CC BY 4.0.</p>
 </div>

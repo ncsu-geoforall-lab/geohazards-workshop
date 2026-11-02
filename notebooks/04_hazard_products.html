@@ -288,7 +288,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>Parts 01 to 03 produced a DoD we trust to about 15 cm, and <code>sig_slope</code>, the change in that DoD that clears a slope-based level of detection. Part 03 also showed that this 95% level is optimistic, with about 11% of stable cells passing instead of 5%, so some of the smallest significant change here is noise. The calibrated LoD in part 03 keeps about 40% less net lowering. In this part we summarize that change the way a response team would ask about it: by burn severity, by subwatershed, and in channels versus hillslopes, and then run a 10 m screening pass that combines topographic and spectral change.</p>
-<div id="f6799b37" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:12:16.111840Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:12:16.111589Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:12:17.392353Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:12:17.391283Z&quot;}}" data-execution_count="1">
+<div id="f6799b37" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T20:01:48.710679Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T20:01:48.710463Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T20:01:50.007202Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T20:01:50.006247Z&quot;}}" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> io</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> workshop_utils <span class="im">import</span> gj, gs, rounded, start</span>
@@ -306,8 +306,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="before-and-after" class="level2">
 <h2 class="anchored" data-anchor-id="before-and-after">Before and after</h2>
 <p>True color from the two Sentinel-2 scenes behind the burn severity, eight days before ignition and five weeks after the storm. Both dates share one color stretch, so a change in color is a change on the ground.</p>
-<div id="b4aft3r2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:12:17.394214Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:12:17.393998Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:12:18.035751Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:12:18.034664Z&quot;}}" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> label, day <span class="kw">in</span> ((<span class="st">"pre"</span>, <span class="st">"21 July 2022"</span>), (<span class="st">"post"</span>, <span class="st">"9 September 2022"</span>)):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> label <span class="kw">in</span> (<span class="st">"pre"</span>, <span class="st">"post"</span>):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    view <span class="op">=</span> gj.Map(width<span class="op">=</span><span class="dv">500</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    view.d_rgb(</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        red<span class="op">=</span><span class="ss">f"s2_</span><span class="sc">{</span>label<span class="sc">}</span><span class="ss">_red@PERMANENT"</span>,</span>
@@ -317,47 +316,60 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    view.d_vect(</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="bu">map</span><span class="op">=</span><span class="st">"mckinney_perimeter@PERMANENT"</span>, fill_color<span class="op">=</span><span class="st">"none"</span>, color<span class="op">=</span><span class="st">"white"</span>, width<span class="op">=</span><span class="dv">2</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Sentinel-2, </span><span class="sc">{</span>day<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    view.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Sentinel-2, 21 July 2022</code></pre>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    view.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="fig-true-color" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-true-color-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-true-color" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-true-color-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-true-color-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="04_hazard_products_files/figure-html/fig-true-color-output-1.png" class="img-fluid figure-img" data-ref-parent="fig-true-color">
 </div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="04_hazard_products_files/figure-html/cell-3-output-2.png" class="img-fluid figure-img"></p>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-true-color-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) 21 July 2022, before the fire
+</figcaption>
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Sentinel-2, 9 September 2022</code></pre>
+<div class="cell-output cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-true-color" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-true-color-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-true-color-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="04_hazard_products_files/figure-html/fig-true-color-output-2.png" class="img-fluid figure-img" data-ref-parent="fig-true-color">
 </div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="04_hazard_products_files/figure-html/cell-3-output-4.png" class="img-fluid figure-img"></p>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-true-color-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) 9 September 2022, after the storm
+</figcaption>
 </figure>
 </div>
 </div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-true-color-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Sentinel-2 true color with one color stretch for both dates
+</figcaption>
+</figure>
 </div>
 </section>
 <section id="burn-severity" class="level2">
 <h2 class="anchored" data-anchor-id="burn-severity">Burn severity</h2>
 <p><code>burn_severity</code> comes from Sentinel-2 dNBR between 21 July and 9 September 2022, classed with the thresholds MTBS published for this fire. NBR uses the 20 m shortwave infrared band resampled to 10 m, and the thresholds come from a Landsat assessment, so treat the classes as approximate. See <code>data/README.md</code> for the details.</p>
-<div id="3cb30008" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:12:18.037501Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:12:18.037334Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:12:19.032436Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:12:19.029865Z&quot;}}" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>severity_map <span class="op">=</span> gj.Map(width<span class="op">=</span><span class="dv">700</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>severity_map.d_shade(shade<span class="op">=</span><span class="st">"dtm_2022_relief"</span>, color<span class="op">=</span><span class="st">"burn_severity@PERMANENT"</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>severity_map.d_vect(</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"mckinney_perimeter@PERMANENT"</span>, fill_color<span class="op">=</span><span class="st">"none"</span>, color<span class="op">=</span><span class="st">"black"</span>, width<span class="op">=</span><span class="dv">2</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>severity_map.d_legend(</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    raster<span class="op">=</span><span class="st">"burn_severity@PERMANENT"</span>,</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">"Burn severity"</span>,</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    at<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">35</span>, <span class="dv">2</span>, <span class="dv">5</span>),</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    fontsize<span class="op">=</span><span class="dv">11</span>,</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    flags<span class="op">=</span><span class="st">"b"</span>,</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>severity_map.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="3cb30008" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T20:01:50.664607Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T20:01:50.664420Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T20:01:51.658210Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T20:01:51.657194Z&quot;}}" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>severity_map <span class="op">=</span> gj.Map(width<span class="op">=</span><span class="dv">700</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>severity_map.d_shade(shade<span class="op">=</span><span class="st">"dtm_2022_relief"</span>, color<span class="op">=</span><span class="st">"burn_severity@PERMANENT"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>severity_map.d_vect(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"mckinney_perimeter@PERMANENT"</span>, fill_color<span class="op">=</span><span class="st">"none"</span>, color<span class="op">=</span><span class="st">"black"</span>, width<span class="op">=</span><span class="dv">2</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>severity_map.d_legend(</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    raster<span class="op">=</span><span class="st">"burn_severity@PERMANENT"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">"Burn severity"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    at<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">35</span>, <span class="dv">2</span>, <span class="dv">5</span>),</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    fontsize<span class="op">=</span><span class="dv">11</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    flags<span class="op">=</span><span class="st">"b"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>severity_map.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -370,34 +382,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="change-by-burn-severity" class="level2">
 <h2 class="anchored" data-anchor-id="change-by-burn-severity">Change by burn severity</h2>
 <p>Volumes grow with area, so compare classes by volume per hectare as well. Lowering is negative here, while part 03 reported erosion as a positive volume. The cells are 1 m, so the sum of a DoD in meters is a volume in cubic meters.</p>
-<div id="0762b30b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:12:19.037377Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:12:19.037191Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:12:19.605718Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:12:19.604902Z&quot;}}" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> zonal_sums(cover, zones):</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        z[<span class="st">"zone"</span>]: (z[<span class="st">"zone_label"</span>], z[<span class="st">"sum"</span>], z[<span class="st">"n"</span>])</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> z <span class="kw">in</span> tools.r_univar(<span class="bu">map</span><span class="op">=</span>cover, zones<span class="op">=</span>zones, <span class="bu">format</span><span class="op">=</span><span class="st">"json"</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>area <span class="op">=</span> {</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    z[<span class="st">"zone"</span>]: z[<span class="st">"n"</span>]</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> z <span class="kw">in</span> tools.r_univar(</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">map</span><span class="op">=</span><span class="st">"dod_debiased"</span>, zones<span class="op">=</span><span class="st">"burn_severity@PERMANENT"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"json"</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>lowering <span class="op">=</span> zonal_sums(<span class="st">"sig_lowering"</span>, <span class="st">"burn_severity@PERMANENT"</span>)</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>raising <span class="op">=</span> zonal_sums(<span class="st">"sig_raising"</span>, <span class="st">"burn_severity@PERMANENT"</span>)</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"</span><span class="sc">{</span><span class="st">'class'</span><span class="sc">:22}{</span><span class="st">'area ha'</span><span class="sc">:&gt;9}{</span><span class="st">'lowering m3'</span><span class="sc">:&gt;13}{</span><span class="st">'raising m3'</span><span class="sc">:&gt;12}{</span><span class="st">'net m3/ha'</span><span class="sc">:&gt;11}</span><span class="ss">"</span></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> zone, label, _, _ <span class="kw">in</span> <span class="bu">sorted</span>((k, <span class="op">*</span>v) <span class="cf">for</span> k, v <span class="kw">in</span> lowering.items()):</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    hectares <span class="op">=</span> area[zone] <span class="op">/</span> <span class="dv">10_000</span></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    low <span class="op">=</span> lowering[zone][<span class="dv">1</span>]</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    rise <span class="op">=</span> raising.get(zone, (<span class="va">None</span>, <span class="fl">0.0</span>))[<span class="dv">1</span>]</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(</span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>label<span class="sc">:22}{</span>hectares<span class="sc">:&gt;9.1f}{</span>rounded(low)<span class="sc">:&gt;13,.0f}{</span>rounded(rise)<span class="sc">:&gt;12,.0f}</span><span class="ss">"</span></span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>rounded((low <span class="op">+</span> rise) <span class="op">/</span> hectares)<span class="sc">:&gt;+11,.0f}</span><span class="ss">"</span></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="0762b30b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T20:01:51.662270Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T20:01:51.662076Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T20:01:52.229459Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T20:01:52.228351Z&quot;}}" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> zonal_sums(cover, zones):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        z[<span class="st">"zone"</span>]: (z[<span class="st">"zone_label"</span>], z[<span class="st">"sum"</span>], z[<span class="st">"n"</span>])</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> z <span class="kw">in</span> tools.r_univar(<span class="bu">map</span><span class="op">=</span>cover, zones<span class="op">=</span>zones, <span class="bu">format</span><span class="op">=</span><span class="st">"json"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>area <span class="op">=</span> {</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    z[<span class="st">"zone"</span>]: z[<span class="st">"n"</span>]</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> z <span class="kw">in</span> tools.r_univar(</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">map</span><span class="op">=</span><span class="st">"dod_debiased"</span>, zones<span class="op">=</span><span class="st">"burn_severity@PERMANENT"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"json"</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>lowering <span class="op">=</span> zonal_sums(<span class="st">"sig_lowering"</span>, <span class="st">"burn_severity@PERMANENT"</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>raising <span class="op">=</span> zonal_sums(<span class="st">"sig_raising"</span>, <span class="st">"burn_severity@PERMANENT"</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"</span><span class="sc">{</span><span class="st">'class'</span><span class="sc">:22}{</span><span class="st">'area ha'</span><span class="sc">:&gt;9}{</span><span class="st">'lowering m3'</span><span class="sc">:&gt;13}{</span><span class="st">'raising m3'</span><span class="sc">:&gt;12}{</span><span class="st">'net m3/ha'</span><span class="sc">:&gt;11}</span><span class="ss">"</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> zone, label, _, _ <span class="kw">in</span> <span class="bu">sorted</span>((k, <span class="op">*</span>v) <span class="cf">for</span> k, v <span class="kw">in</span> lowering.items()):</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    hectares <span class="op">=</span> area[zone] <span class="op">/</span> <span class="dv">10_000</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    low <span class="op">=</span> lowering[zone][<span class="dv">1</span>]</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    rise <span class="op">=</span> raising.get(zone, (<span class="va">None</span>, <span class="fl">0.0</span>))[<span class="dv">1</span>]</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>label<span class="sc">:22}{</span>hectares<span class="sc">:&gt;9.1f}{</span>rounded(low)<span class="sc">:&gt;13,.0f}{</span>rounded(rise)<span class="sc">:&gt;12,.0f}</span><span class="ss">"</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>rounded((low <span class="op">+</span> rise) <span class="op">/</span> hectares)<span class="sc">:&gt;+11,.0f}</span><span class="ss">"</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>class                   area ha  lowering m3  raising m3  net m3/ha
 Unburned to low            85.6      -17,000      11,000        -73
@@ -413,28 +425,28 @@ Increased greenness         0.2          -14           4        -52</code></pre>
 <section id="change-by-subwatershed" class="level2">
 <h2 class="anchored" data-anchor-id="change-by-subwatershed">Change by subwatershed</h2>
 <p>A response team allocates by drainage. Split the region into subwatersheds of at least 20 ha with <em>r.watershed</em> and total the significant change in each. Subwatersheds cut by the edge of the region only carry the part inside it.</p>
-<div id="6ffa9761" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:12:19.607439Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:12:19.607268Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:12:24.984958Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:12:24.984104Z&quot;}}" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>tools.r_watershed(elevation<span class="op">=</span><span class="st">"dtm_2022"</span>, threshold<span class="op">=</span><span class="dv">200_000</span>, basin<span class="op">=</span><span class="st">"basins"</span>, flags<span class="op">=</span><span class="st">"a"</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>tools.r_to_vect(<span class="bu">input</span><span class="op">=</span><span class="st">"basins"</span>, output<span class="op">=</span><span class="st">"basins"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"area"</span>, flags<span class="op">=</span><span class="st">"s"</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>tools.r_stats_zonal(base<span class="op">=</span><span class="st">"basins"</span>, cover<span class="op">=</span><span class="st">"sig_slope"</span>, method<span class="op">=</span><span class="st">"sum"</span>, output<span class="op">=</span><span class="st">"basin_net"</span>)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Red for net lowering, blue for net raising, symmetric about zero.</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>stats <span class="op">=</span> tools.r_univar(<span class="bu">map</span><span class="op">=</span><span class="st">"basin_net"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"json"</span>)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>extreme <span class="op">=</span> <span class="bu">max</span>(<span class="bu">abs</span>(stats[<span class="st">"min"</span>]), <span class="bu">abs</span>(stats[<span class="st">"max"</span>]))</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>tools.r_colors(</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"basin_net"</span>,</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    rules<span class="op">=</span>io.StringIO(<span class="ss">f"</span><span class="sc">{</span><span class="op">-</span>extreme<span class="sc">}</span><span class="ss"> 178:24:43</span><span class="ch">\n</span><span class="ss">0 247:247:247</span><span class="ch">\n</span><span class="sc">{</span>extreme<span class="sc">}</span><span class="ss"> 33:102:172</span><span class="ch">\n</span><span class="ss">"</span>),</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>net <span class="op">=</span> <span class="bu">sorted</span>(</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    (</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>        (z[<span class="st">"zone"</span>], z[<span class="st">"sum"</span>], z[<span class="st">"n"</span>])</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> z <span class="kw">in</span> tools.r_univar(<span class="bu">map</span><span class="op">=</span><span class="st">"sig_slope"</span>, zones<span class="op">=</span><span class="st">"basins"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"json"</span>)</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    key<span class="op">=</span><span class="kw">lambda</span> item: item[<span class="dv">1</span>],</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Subwatersheds with the most net lowering:"</span>)</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> zone, total, _ <span class="kw">in</span> net[:<span class="dv">5</span>]:</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  basin </span><span class="sc">{</span>zone<span class="sc">:&gt;5}</span><span class="ss">: </span><span class="sc">{</span>rounded(total)<span class="sc">:&gt;+12,.0f}</span><span class="ss"> m3"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="6ffa9761" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T20:01:52.231357Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T20:01:52.231155Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T20:01:57.705279Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T20:01:57.704330Z&quot;}}" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>tools.r_watershed(elevation<span class="op">=</span><span class="st">"dtm_2022"</span>, threshold<span class="op">=</span><span class="dv">200_000</span>, basin<span class="op">=</span><span class="st">"basins"</span>, flags<span class="op">=</span><span class="st">"a"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>tools.r_to_vect(<span class="bu">input</span><span class="op">=</span><span class="st">"basins"</span>, output<span class="op">=</span><span class="st">"basins"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"area"</span>, flags<span class="op">=</span><span class="st">"s"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>tools.r_stats_zonal(base<span class="op">=</span><span class="st">"basins"</span>, cover<span class="op">=</span><span class="st">"sig_slope"</span>, method<span class="op">=</span><span class="st">"sum"</span>, output<span class="op">=</span><span class="st">"basin_net"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Red for net lowering, blue for net raising, symmetric about zero.</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>stats <span class="op">=</span> tools.r_univar(<span class="bu">map</span><span class="op">=</span><span class="st">"basin_net"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"json"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>extreme <span class="op">=</span> <span class="bu">max</span>(<span class="bu">abs</span>(stats[<span class="st">"min"</span>]), <span class="bu">abs</span>(stats[<span class="st">"max"</span>]))</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>tools.r_colors(</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"basin_net"</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    rules<span class="op">=</span>io.StringIO(<span class="ss">f"</span><span class="sc">{</span><span class="op">-</span>extreme<span class="sc">}</span><span class="ss"> 178:24:43</span><span class="ch">\n</span><span class="ss">0 247:247:247</span><span class="ch">\n</span><span class="sc">{</span>extreme<span class="sc">}</span><span class="ss"> 33:102:172</span><span class="ch">\n</span><span class="ss">"</span>),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>net <span class="op">=</span> <span class="bu">sorted</span>(</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    (</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        (z[<span class="st">"zone"</span>], z[<span class="st">"sum"</span>], z[<span class="st">"n"</span>])</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> z <span class="kw">in</span> tools.r_univar(<span class="bu">map</span><span class="op">=</span><span class="st">"sig_slope"</span>, zones<span class="op">=</span><span class="st">"basins"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"json"</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    key<span class="op">=</span><span class="kw">lambda</span> item: item[<span class="dv">1</span>],</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Subwatersheds with the most net lowering:"</span>)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> zone, total, _ <span class="kw">in</span> net[:<span class="dv">5</span>]:</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  basin </span><span class="sc">{</span>zone<span class="sc">:&gt;5}</span><span class="ss">: </span><span class="sc">{</span>rounded(total)<span class="sc">:&gt;+12,.0f}</span><span class="ss"> m3"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Subwatersheds with the most net lowering:
   basin    56:      -78,000 m3
@@ -444,17 +456,17 @@ Increased greenness         0.2          -14           4        -52</code></pre>
   basin    76:      -34,000 m3</code></pre>
 </div>
 </div>
-<div id="02b2eae2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:12:24.986560Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:12:24.986396Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:12:26.192366Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:12:26.191443Z&quot;}}" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>basin_map <span class="op">=</span> gj.Map(width<span class="op">=</span><span class="dv">700</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>basin_map.d_shade(shade<span class="op">=</span><span class="st">"dtm_2022_relief"</span>, color<span class="op">=</span><span class="st">"basin_net"</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>basin_map.d_vect(<span class="bu">map</span><span class="op">=</span><span class="st">"basins"</span>, fill_color<span class="op">=</span><span class="st">"none"</span>, color<span class="op">=</span><span class="st">"white"</span>, width<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>basin_map.d_vect(</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"mckinney_perimeter@PERMANENT"</span>, fill_color<span class="op">=</span><span class="st">"none"</span>, color<span class="op">=</span><span class="st">"black"</span>, width<span class="op">=</span><span class="dv">2</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>basin_map.d_legend(</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    raster<span class="op">=</span><span class="st">"basin_net"</span>, title<span class="op">=</span><span class="st">"Net change (m3)"</span>, at<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">40</span>, <span class="dv">2</span>, <span class="dv">5</span>), flags<span class="op">=</span><span class="st">"b"</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>basin_map.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="02b2eae2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T20:01:57.707120Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T20:01:57.706906Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T20:01:58.950059Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T20:01:58.948968Z&quot;}}" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>basin_map <span class="op">=</span> gj.Map(width<span class="op">=</span><span class="dv">700</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>basin_map.d_shade(shade<span class="op">=</span><span class="st">"dtm_2022_relief"</span>, color<span class="op">=</span><span class="st">"basin_net"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>basin_map.d_vect(<span class="bu">map</span><span class="op">=</span><span class="st">"basins"</span>, fill_color<span class="op">=</span><span class="st">"none"</span>, color<span class="op">=</span><span class="st">"white"</span>, width<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>basin_map.d_vect(</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"mckinney_perimeter@PERMANENT"</span>, fill_color<span class="op">=</span><span class="st">"none"</span>, color<span class="op">=</span><span class="st">"black"</span>, width<span class="op">=</span><span class="dv">2</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>basin_map.d_legend(</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    raster<span class="op">=</span><span class="st">"basin_net"</span>, title<span class="op">=</span><span class="st">"Net change (m3)"</span>, at<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">40</span>, <span class="dv">2</span>, <span class="dv">5</span>), flags<span class="op">=</span><span class="st">"b"</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>basin_map.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -467,26 +479,26 @@ Increased greenness         0.2          -14           4        -52</code></pre>
 <section id="channels-and-hillslopes" class="level2">
 <h2 class="anchored" data-anchor-id="channels-and-hillslopes">Channels and hillslopes</h2>
 <p>Part 02 kept channels out of the stable mask. Here they are the point: compare the change within 10 m of a channel with the change on the hillslopes.</p>
-<div id="66efc919" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:12:26.197570Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:12:26.197405Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:12:27.088815Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:12:27.087813Z&quot;}}" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tools.r_mapcalc(expression<span class="op">=</span><span class="st">"landform = if(stream_distance &lt;= 10, 1, 2)"</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>tools.r_category(</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"landform"</span>, separator<span class="op">=</span><span class="st">":"</span>, rules<span class="op">=</span>io.StringIO(<span class="st">"1:channel</span><span class="ch">\n</span><span class="st">2:hillslope</span><span class="ch">\n</span><span class="st">"</span>)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>lowering <span class="op">=</span> zonal_sums(<span class="st">"sig_lowering"</span>, <span class="st">"landform"</span>)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>raising <span class="op">=</span> zonal_sums(<span class="st">"sig_raising"</span>, <span class="st">"landform"</span>)</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>area <span class="op">=</span> {</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    z[<span class="st">"zone"</span>]: z[<span class="st">"n"</span>]</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> z <span class="kw">in</span> tools.r_univar(<span class="bu">map</span><span class="op">=</span><span class="st">"dod_debiased"</span>, zones<span class="op">=</span><span class="st">"landform"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"json"</span>)</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">''</span><span class="sc">:10}{</span><span class="st">'area ha'</span><span class="sc">:&gt;9}{</span><span class="st">'lowering m3'</span><span class="sc">:&gt;13}{</span><span class="st">'raising m3'</span><span class="sc">:&gt;12}{</span><span class="st">'net m3/ha'</span><span class="sc">:&gt;11}</span><span class="ss">"</span>)</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> zone <span class="kw">in</span> (<span class="dv">1</span>, <span class="dv">2</span>):</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    label <span class="op">=</span> lowering[zone][<span class="dv">0</span>]</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    hectares <span class="op">=</span> area[zone] <span class="op">/</span> <span class="dv">10_000</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    low, rise <span class="op">=</span> lowering[zone][<span class="dv">1</span>], raising[zone][<span class="dv">1</span>]</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>label<span class="sc">:10}{</span>hectares<span class="sc">:&gt;9.1f}{</span>rounded(low)<span class="sc">:&gt;13,.0f}{</span>rounded(rise)<span class="sc">:&gt;12,.0f}</span><span class="ss">"</span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>rounded((low <span class="op">+</span> rise) <span class="op">/</span> hectares)<span class="sc">:&gt;+11,.0f}</span><span class="ss">"</span></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="66efc919" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T20:01:58.955544Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T20:01:58.955344Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T20:01:59.860218Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T20:01:59.859286Z&quot;}}" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>tools.r_mapcalc(expression<span class="op">=</span><span class="st">"landform = if(stream_distance &lt;= 10, 1, 2)"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>tools.r_category(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"landform"</span>, separator<span class="op">=</span><span class="st">":"</span>, rules<span class="op">=</span>io.StringIO(<span class="st">"1:channel</span><span class="ch">\n</span><span class="st">2:hillslope</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>lowering <span class="op">=</span> zonal_sums(<span class="st">"sig_lowering"</span>, <span class="st">"landform"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>raising <span class="op">=</span> zonal_sums(<span class="st">"sig_raising"</span>, <span class="st">"landform"</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>area <span class="op">=</span> {</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    z[<span class="st">"zone"</span>]: z[<span class="st">"n"</span>]</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> z <span class="kw">in</span> tools.r_univar(<span class="bu">map</span><span class="op">=</span><span class="st">"dod_debiased"</span>, zones<span class="op">=</span><span class="st">"landform"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"json"</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">''</span><span class="sc">:10}{</span><span class="st">'area ha'</span><span class="sc">:&gt;9}{</span><span class="st">'lowering m3'</span><span class="sc">:&gt;13}{</span><span class="st">'raising m3'</span><span class="sc">:&gt;12}{</span><span class="st">'net m3/ha'</span><span class="sc">:&gt;11}</span><span class="ss">"</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> zone <span class="kw">in</span> (<span class="dv">1</span>, <span class="dv">2</span>):</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    label <span class="op">=</span> lowering[zone][<span class="dv">0</span>]</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    hectares <span class="op">=</span> area[zone] <span class="op">/</span> <span class="dv">10_000</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    low, rise <span class="op">=</span> lowering[zone][<span class="dv">1</span>], raising[zone][<span class="dv">1</span>]</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>label<span class="sc">:10}{</span>hectares<span class="sc">:&gt;9.1f}{</span>rounded(low)<span class="sc">:&gt;13,.0f}{</span>rounded(rise)<span class="sc">:&gt;12,.0f}</span><span class="ss">"</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>rounded((low <span class="op">+</span> rise) <span class="op">/</span> hectares)<span class="sc">:&gt;+11,.0f}</span><span class="ss">"</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            area ha  lowering m3  raising m3  net m3/ha
 channel        97.0      -98,000      39,000       -610
@@ -498,18 +510,18 @@ hillslope     547.7     -380,000      35,000       -620</code></pre>
 <section id="a-10-m-screening-pass" class="level2">
 <h2 class="anchored" data-anchor-id="a-10-m-screening-pass">A 10 m screening pass</h2>
 <p><em>r.dem.screen</em> is a coarse first pass for directing field crews. It flags topographic change where the DoD exceeds a threshold and spectral change where vegetation was lost, and ranks cells with both highest. Here the spectral change is the NBR change, post minus pre, so loss is negative.</p>
-<div id="ba4b644b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:12:27.090517Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:12:27.090348Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:12:27.883358Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:12:27.882381Z&quot;}}" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> gs.RegionManager(region<span class="op">=</span><span class="st">"focal@PERMANENT"</span>, res<span class="op">=</span><span class="dv">10</span>, flags<span class="op">=</span><span class="st">"a"</span>):</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    tools.r_resamp_stats(<span class="bu">input</span><span class="op">=</span><span class="st">"dod_debiased"</span>, output<span class="op">=</span><span class="st">"dod_10m"</span>, method<span class="op">=</span><span class="st">"average"</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    tools.r_mapcalc(expression<span class="op">=</span><span class="st">"nbr_change = -dnbr@PERMANENT / 1000.0"</span>)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    tools.r_dem_screen(</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>        dod<span class="op">=</span><span class="st">"dod_10m"</span>,</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        spectral_change<span class="op">=</span><span class="st">"nbr_change"</span>,</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        output<span class="op">=</span><span class="st">"screen"</span>,</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        topo_threshold<span class="op">=</span><span class="fl">0.25</span>,</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        spectral_threshold<span class="op">=-</span><span class="fl">0.15</span>,</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(tools.r_stats(<span class="bu">input</span><span class="op">=</span><span class="st">"screen"</span>, flags<span class="op">=</span><span class="st">"lcpn"</span>).text)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="ba4b644b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T20:01:59.861984Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T20:01:59.861793Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T20:02:00.688209Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T20:02:00.687200Z&quot;}}" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> gs.RegionManager(region<span class="op">=</span><span class="st">"focal@PERMANENT"</span>, res<span class="op">=</span><span class="dv">10</span>, flags<span class="op">=</span><span class="st">"a"</span>):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    tools.r_resamp_stats(<span class="bu">input</span><span class="op">=</span><span class="st">"dod_debiased"</span>, output<span class="op">=</span><span class="st">"dod_10m"</span>, method<span class="op">=</span><span class="st">"average"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    tools.r_mapcalc(expression<span class="op">=</span><span class="st">"nbr_change = -dnbr@PERMANENT / 1000.0"</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    tools.r_dem_screen(</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        dod<span class="op">=</span><span class="st">"dod_10m"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        spectral_change<span class="op">=</span><span class="st">"nbr_change"</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        output<span class="op">=</span><span class="st">"screen"</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        topo_threshold<span class="op">=</span><span class="fl">0.25</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        spectral_threshold<span class="op">=-</span><span class="fl">0.15</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(tools.r_stats(<span class="bu">input</span><span class="op">=</span><span class="st">"screen"</span>, flags<span class="op">=</span><span class="st">"lcpn"</span>).text)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>0 No significant change 14663 22.75%
 1 Spectral change (vegetation damage) 46213 71.71%
@@ -518,16 +530,16 @@ hillslope     547.7     -380,000      35,000       -620</code></pre>
 </div>
 </div>
 <p>Averaging to 10 m smooths the DoD, so a 10 m cell rarely moves as much as its steepest 1 m cells. At 0.5 m almost no cells pass; at 0.25 m about 5% show both topographic and spectral change, a workable list for a field crew. Spectral change alone covers most of the burn scar, so the combined class is what narrows the search.</p>
-<div id="b045c213" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:12:27.885103Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:12:27.884929Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:12:28.901135Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:12:28.900207Z&quot;}}" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>screen_map <span class="op">=</span> gj.Map(width<span class="op">=</span><span class="dv">700</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>screen_map.d_shade(shade<span class="op">=</span><span class="st">"dtm_2022_relief"</span>, color<span class="op">=</span><span class="st">"screen"</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>screen_map.d_vect(</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"mckinney_perimeter@PERMANENT"</span>, fill_color<span class="op">=</span><span class="st">"none"</span>, color<span class="op">=</span><span class="st">"black"</span>, width<span class="op">=</span><span class="dv">2</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>screen_map.d_legend(</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    raster<span class="op">=</span><span class="st">"screen"</span>, title<span class="op">=</span><span class="st">"Screening"</span>, at<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">35</span>, <span class="dv">2</span>, <span class="dv">5</span>), fontsize<span class="op">=</span><span class="dv">11</span>, flags<span class="op">=</span><span class="st">"b"</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>screen_map.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="b045c213" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T20:02:00.689931Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T20:02:00.689751Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T20:02:01.718855Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T20:02:01.717835Z&quot;}}" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>screen_map <span class="op">=</span> gj.Map(width<span class="op">=</span><span class="dv">700</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>screen_map.d_shade(shade<span class="op">=</span><span class="st">"dtm_2022_relief"</span>, color<span class="op">=</span><span class="st">"screen"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>screen_map.d_vect(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"mckinney_perimeter@PERMANENT"</span>, fill_color<span class="op">=</span><span class="st">"none"</span>, color<span class="op">=</span><span class="st">"black"</span>, width<span class="op">=</span><span class="dv">2</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>screen_map.d_legend(</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    raster<span class="op">=</span><span class="st">"screen"</span>, title<span class="op">=</span><span class="st">"Screening"</span>, at<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">35</span>, <span class="dv">2</span>, <span class="dv">5</span>), fontsize<span class="op">=</span><span class="dv">11</span>, flags<span class="op">=</span><span class="st">"b"</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>screen_map.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -541,27 +553,27 @@ hillslope     547.7     -380,000      35,000       -620</code></pre>
 <section id="hand-off-files" class="level2">
 <h2 class="anchored" data-anchor-id="hand-off-files">Hand-off files</h2>
 <p>Emergency managers work in desktop GIS. Export the significant change and the screening result as cloud-optimized GeoTIFFs, and the subwatersheds with their net change as a GeoPackage. All three open in ArcGIS Pro and QGIS.</p>
-<div id="e4p0rt02" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:12:28.905189Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:12:28.905002Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:12:31.299340Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:12:31.298303Z&quot;}}" data-execution_count="10">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>exports <span class="op">=</span> Path(<span class="st">"exports"</span>)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>exports.mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>tools.r_out_gdal(</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">input</span><span class="op">=</span><span class="st">"sig_slope"</span>,</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    output<span class="op">=</span><span class="bu">str</span>(exports <span class="op">/</span> <span class="st">"sig_slope.tif"</span>),</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">format</span><span class="op">=</span><span class="st">"COG"</span>,</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">type</span><span class="op">=</span><span class="st">"Float32"</span>,</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    flags<span class="op">=</span><span class="st">"cf"</span>,</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co"># The screening result is 10 m, so export it on a 10 m region.</span></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> gs.RegionManager(region<span class="op">=</span><span class="st">"focal@PERMANENT"</span>, res<span class="op">=</span><span class="dv">10</span>, flags<span class="op">=</span><span class="st">"a"</span>):</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    tools.r_out_gdal(<span class="bu">input</span><span class="op">=</span><span class="st">"screen"</span>, output<span class="op">=</span><span class="bu">str</span>(exports <span class="op">/</span> <span class="st">"screen.tif"</span>), <span class="bu">format</span><span class="op">=</span><span class="st">"COG"</span>)</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>tools.v_rast_stats(</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"basins"</span>, raster<span class="op">=</span><span class="st">"sig_slope"</span>, method<span class="op">=</span><span class="st">"sum"</span>, column_prefix<span class="op">=</span><span class="st">"net_m3"</span>, flags<span class="op">=</span><span class="st">"c"</span></span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>tools.v_out_ogr(<span class="bu">input</span><span class="op">=</span><span class="st">"basins"</span>, output<span class="op">=</span><span class="bu">str</span>(exports <span class="op">/</span> <span class="st">"basins.gpkg"</span>), <span class="bu">format</span><span class="op">=</span><span class="st">"GPKG"</span>)</span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> path <span class="kw">in</span> <span class="bu">sorted</span>(exports.iterdir()):</span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>path<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>path<span class="sc">.</span>stat()<span class="sc">.</span>st_size <span class="op">/</span> <span class="fl">1e6</span><span class="sc">:.1f}</span><span class="ss"> MB"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="e4p0rt02" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T20:02:01.721981Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T20:02:01.721790Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T20:02:04.078225Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T20:02:04.077333Z&quot;}}" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>exports <span class="op">=</span> Path(<span class="st">"exports"</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>exports.mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>tools.r_out_gdal(</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">input</span><span class="op">=</span><span class="st">"sig_slope"</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    output<span class="op">=</span><span class="bu">str</span>(exports <span class="op">/</span> <span class="st">"sig_slope.tif"</span>),</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">format</span><span class="op">=</span><span class="st">"COG"</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">type</span><span class="op">=</span><span class="st">"Float32"</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    flags<span class="op">=</span><span class="st">"cf"</span>,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># The screening result is 10 m, so export it on a 10 m region.</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> gs.RegionManager(region<span class="op">=</span><span class="st">"focal@PERMANENT"</span>, res<span class="op">=</span><span class="dv">10</span>, flags<span class="op">=</span><span class="st">"a"</span>):</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    tools.r_out_gdal(<span class="bu">input</span><span class="op">=</span><span class="st">"screen"</span>, output<span class="op">=</span><span class="bu">str</span>(exports <span class="op">/</span> <span class="st">"screen.tif"</span>), <span class="bu">format</span><span class="op">=</span><span class="st">"COG"</span>)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>tools.v_rast_stats(</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"basins"</span>, raster<span class="op">=</span><span class="st">"sig_slope"</span>, method<span class="op">=</span><span class="st">"sum"</span>, column_prefix<span class="op">=</span><span class="st">"net_m3"</span>, flags<span class="op">=</span><span class="st">"c"</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>tools.v_out_ogr(<span class="bu">input</span><span class="op">=</span><span class="st">"basins"</span>, output<span class="op">=</span><span class="bu">str</span>(exports <span class="op">/</span> <span class="st">"basins.gpkg"</span>), <span class="bu">format</span><span class="op">=</span><span class="st">"GPKG"</span>)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> path <span class="kw">in</span> <span class="bu">sorted</span>(exports.iterdir()):</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>path<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>path<span class="sc">.</span>stat()<span class="sc">.</span>st_size <span class="op">/</span> <span class="fl">1e6</span><span class="sc">:.1f}</span><span class="ss"> MB"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>exports/basins.gpkg: 1.1 MB
 exports/screen.tif: 0.0 MB
@@ -999,11 +1011,11 @@ exports/sig_slope.tif: 11.0 MB</code></pre>
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p><img src="../site/nsf-logo.png" alt="NSF logo" height="40"> <img src="../site/cga-ncsu-white.png" alt="Center for Geospatial Analytics, NC State University logo" height="40"> Supported by the U.S. National Science Foundation under award 2606178.</p>
+<p><img src="../site/nsf-logo.png" alt="NSF logo" height="48"> <img src="../site/cga-ncsu-white.png" alt="Center for Geospatial Analytics, NC State University logo" height="48"></p>
 </div>   
     <div class="nav-footer-center">
-      &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ncsu-geoforall-lab/geohazards-workshop/blob/main/notebooks/04_hazard_products.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/ncsu-geoforall-lab/geohazards-workshop/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+<p>Supported by the U.S. National Science Foundation under award 2606178.</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ncsu-geoforall-lab/geohazards-workshop/blob/main/notebooks/04_hazard_products.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/ncsu-geoforall-lab/geohazards-workshop/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p><a href="https://grass.osgeo.org">grass.osgeo.org</a> | Code GPL-3.0. Text CC BY 4.0.</p>
 </div>
