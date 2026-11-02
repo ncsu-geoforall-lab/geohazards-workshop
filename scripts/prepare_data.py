@@ -8,8 +8,9 @@ The 2013 USFS rasters need an OpenTopography login, so download them once
 (bare earth and highest hit, GeoTIFF) and pass the files with --dtm2013 and
 --dsm2013. Participants get them from the release.
 
-Burn severity comes from Sentinel-2 through the t.stac addon, so install it
-first: pip install pystac pystac_client tqdm, then g.extension extension=t.stac.
+Burn severity and the true-color images come from Sentinel-2 through the
+t.stac addon, so install it first: pip install pystac pystac_client tqdm, then
+g.extension extension=t.stac. Stream lines come from the USGS NHD service.
 
 Usage (inside the devcontainer):
     uv run python scripts/prepare_data.py \
@@ -37,6 +38,9 @@ MTBS_PERIMETERS_2022 = (
     "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_MTBS_01/MapServer/79/query"
 )
 MCKINNEY_FIRE_ID = "CA4183012289520220729"
+NHD_FLOWLINES = (
+    "https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer/6/query"
+)
 EPSG = "26910"
 BUFFER_M = 100
 
@@ -80,6 +84,38 @@ def fetch_perimeter(dest):
     dest.write_text(json.dumps(data))
 
 
+def fetch_flowlines(dest, aoi):
+    """Download NHD large-scale flowlines over the bounding box of the AOI."""
+    xs, ys = [], []
+
+    def walk(coords):
+        if isinstance(coords[0], (int, float)):
+            xs.append(coords[0])
+            ys.append(coords[1])
+        else:
+            for item in coords:
+                walk(item)
+
+    for feature in json.loads(aoi.read_text())["features"]:
+        walk(feature["geometry"]["coordinates"])
+    query = urllib.parse.urlencode(
+        {
+            "geometry": f"{min(xs)},{min(ys)},{max(xs)},{max(ys)}",
+            "geometryType": "esriGeometryEnvelope",
+            "inSR": "4269",
+            "spatialRel": "esriSpatialRelIntersects",
+            "outFields": "gnis_name,ftype,fcode,lengthkm",
+            "outSR": "4326",
+            "f": "geojson",
+        }
+    )
+    with urllib.request.urlopen(f"{NHD_FLOWLINES}?{query}", timeout=120) as r:
+        data = json.load(r)
+    if not data.get("features") or data.get("exceededTransferLimit"):
+        raise RuntimeError("NHD returned no flowlines or a truncated result")
+    dest.write_text(json.dumps(data))
+
+
 def clip(src, dest, bounds):
     """Clip a raster to bounds (w, s, e, n) in its own grid, no resampling."""
     w, s, e, n = bounds
@@ -92,9 +128,11 @@ def clip(src, dest, bounds):
     print(f"Wrote {dest}")
 
 
-def add_burn_severity(tools):
-    """Compute 10 m dNBR and MTBS-threshold severity classes in PERMANENT.
+def add_sentinel2(tools):
+    """Add 10 m dNBR, MTBS-threshold severity classes, and true color to PERMANENT.
 
+    The red, green, and blue bands of both scenes are kept as s2_pre_* and
+    s2_post_*, with one linear color stretch so the two dates compare directly.
     Needs the t.stac addon (g.extension extension=t.stac) and pystac_client.
     """
     th = MTBS_THRESHOLDS
@@ -103,7 +141,7 @@ def add_burn_severity(tools):
         url=EARTH_SEARCH,
         collection_id="sentinel-2-l2a",
         ids=f"{S2_PRE},{S2_POST}",
-        asset_keys="nir,swir22",
+        asset_keys="red,green,blue,nir,swir22",
         method="bilinear",
         resolution="value",
         resolution_value=10,
@@ -164,8 +202,28 @@ def add_burn_severity(tools):
         ),
         flags="f",
     )
-    tools.g_region(region="focal")
     print(f"Burn severity added (dNBR offset {offset:.1f})")
+
+    for label, item, day in (
+        ("pre", S2_PRE, "21 Jul 2022"),
+        ("post", S2_POST, "9 Sep 2022"),
+    ):
+        for band in ("red", "green", "blue"):
+            name = f"s2_{label}_{band}"
+            tools.g_rename(raster=(f"sentinel-2-l2a.{item}.{band}", name))
+            tools.r_support(
+                map=name,
+                title=f"Sentinel-2 L2A {band}, {day}",
+                units="reflectance x 10000",
+                source1=f"Sentinel-2 L2A {item}, Element84 Earth Search",
+            )
+    # One linear stretch, reflectance 0 to 0.2, for every band of both dates.
+    stretch = "0 0:0:0\n2000 255:255:255\n10000 255:255:255\n"
+    for label in ("pre", "post"):
+        for band in ("red", "green", "blue"):
+            tools.r_colors(map=f"s2_{label}_{band}", rules=io.StringIO(stretch))
+    tools.g_region(region="focal")
+    print("True color added")
 
 
 def main():
@@ -183,6 +241,11 @@ def main():
         type=Path,
         help="Local copy of the MTBS perimeter GeoJSON, used instead of the MTBS service",
     )
+    parser.add_argument(
+        "--flowlines",
+        type=Path,
+        help="Local copy of the NHD flowlines GeoJSON, used instead of the NHD service",
+    )
     parser.add_argument("--out", type=Path, default=REPO / "grassdata")
     args = parser.parse_args()
 
@@ -197,19 +260,26 @@ def main():
         perimeter.write_text(args.perimeter.read_text())
     else:
         fetch_perimeter(perimeter)
+    aoi = REPO / "data/aoi/HumbugCreek.geojson"
+    flowlines = raw / "nhd_flowlines.geojson"
+    if args.flowlines:
+        flowlines.write_text(args.flowlines.read_text())
+    else:
+        fetch_flowlines(flowlines, aoi)
 
     gs.create_project(project, epsg=EPSG)
     with gs.setup.init(project) as session:
         tools = Tools(session=session)
-        tools.v_import(input=str(REPO / "data/aoi/HumbugCreek.geojson"), output="huc12")
+        tools.v_import(input=str(aoi), output="huc12")
         tools.v_import(input=str(REPO / "data/aoi/focal.geojson"), output="focal_aoi")
         tools.v_import(input=str(perimeter), output="mckinney_perimeter")
+        tools.v_import(input=str(flowlines), output="nhd_flowlines")
         tools.g_region(vector="focal_aoi", res=1, flags="a")
         tools.g_region(save="focal")
         tools.g_region(flags="s")  # also make it the project default
         region = tools.g_region(flags="g", format="json")
         bounds = (region["west"], region["south"], region["east"], region["north"])
-        add_burn_severity(tools)
+        add_sentinel2(tools)
 
     clip(B22_TILE, raw / "usgs_2022_dtm.tif", bounds)
     if args.dtm2013:

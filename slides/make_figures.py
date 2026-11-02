@@ -76,6 +76,12 @@ save_map(
             color="194:64:47",
             width=2,
         ),
+        m.d_vect(
+            map="nhd_flowlines@PERMANENT",
+            where="gnis_name IN ('Humbug Creek', 'Klamath River')",
+            color="47:109:181",
+            width=2,
+        ),
         m.d_vect(map="huc12@PERMANENT", fill_color="none", color="0:57:63", width=3),
         m.d_vect(
             map="focal_aoi@PERMANENT", fill_color="none", color="8:139:54", width=4
@@ -99,6 +105,26 @@ save_map(
         ),
     ),
 )
+
+# True color before and after, on the shared stretch from prepare_data.py.
+for label in ("pre", "post"):
+    save_map(
+        f"s2_{label}",
+        lambda m, label=label: (
+            m.d_rgb(
+                red=f"s2_{label}_red@PERMANENT",
+                green=f"s2_{label}_green@PERMANENT",
+                blue=f"s2_{label}_blue@PERMANENT",
+            ),
+            m.d_vect(
+                map="mckinney_perimeter@PERMANENT",
+                fill_color="none",
+                color="white",
+                width=2,
+            ),
+        ),
+        width=800,
+    )
 
 save_map(
     "severity",

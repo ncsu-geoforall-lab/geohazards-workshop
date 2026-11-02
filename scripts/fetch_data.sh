@@ -5,7 +5,7 @@
 set -euo pipefail
 
 REPO="ncsu-geoforall-lab/geohazards-workshop"
-TAG="${DATA_TAG:-data-v0.2}"
+TAG="${DATA_TAG:-data-v0.3}"
 ASSET="humbug_creek.tar.gz"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEST="$ROOT/grassdata"
@@ -13,12 +13,6 @@ PROJECT="$DEST/humbug_creek"
 STAMP="$PROJECT/.data_tag"
 
 if [ -f "$STAMP" ] && [ "$(cat "$STAMP")" = "$TAG" ]; then
-    echo "Workshop data $TAG already present in $PROJECT"
-    exit 0
-fi
-# data-v0.2 was released before the stamp file. Its checkpoints mark it.
-if [ ! -f "$STAMP" ] && [ "$TAG" = "data-v0.2" ] && [ -d "$PROJECT/checkpoint_03" ]; then
-    echo "$TAG" >"$STAMP"
     echo "Workshop data $TAG already present in $PROJECT"
     exit 0
 fi

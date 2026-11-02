@@ -44,6 +44,7 @@ Every notebook starts from a checkpoint, so you can rejoin at any block.
 ::: {.column width="52%"}
 - A tributary of the Klamath River in Siskiyou County, HUC12 180102060801, 96 km²
 - Red: the 2022 McKinney Fire perimeter
+- Blue: Humbug Creek and the Klamath River, from the USGS NHD
 - Green: our 3.0 x 2.2 km study region, across the fire control line
 :::
 ::::
@@ -85,6 +86,23 @@ Each step set up the next one.
 4. **Downstream impacts.** Sediment-laden flooding reached the Klamath River. Dissolved oxygen fell to zero for 5.25 hours 71 km downstream, and fish died along 95 km of the river.
 
 [Curtis et al. (2025).]{.source}
+
+## The burn from orbit
+
+:::: {.columns}
+::: {.column width="50%"}
+![](figures/s2_pre.jpg){width="100%"}
+
+21 July 2022, eight days before ignition
+:::
+::: {.column width="50%"}
+![](figures/s2_post.jpg){width="100%"}
+
+9 September 2022, five weeks after the storm
+:::
+::::
+
+[Sentinel-2 true color, one color stretch for both dates. Contains modified Copernicus Sentinel data 2022.]{.source}
 
 ## Two lidar surveys
 
@@ -194,7 +212,7 @@ Materials: <https://github.com/ncsu-geoforall-lab/geohazards-workshop>
 
 - Tim Bailey suggested the Humbug Creek site and the data sources
 - Supported by the U.S. National Science Foundation under award 2606178
-- Data from USFS Region 5 and OpenTopography ([10.5069/G9FJ2F12](https://doi.org/10.5069/G9FJ2F12)), USGS 3DEP, MTBS, and modified Copernicus Sentinel data 2022
+- Data from USFS Region 5 and OpenTopography ([10.5069/G9FJ2F12](https://doi.org/10.5069/G9FJ2F12)), USGS 3DEP, USGS NHD, MTBS, and modified Copernicus Sentinel data 2022
 
 ![](images/grass-green-horizontal.svg){width="280"}
 
