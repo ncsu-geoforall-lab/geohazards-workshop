@@ -1,0 +1,1 @@
+Sitemap: https://ncsu-geoforall-lab.github.io/geohazards-workshop/sitemap.xml

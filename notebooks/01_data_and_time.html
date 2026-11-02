@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>01. Data, datums, and the temporal framework – Geohazard Change Detection with GRASS</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../notebooks/02_coregister_and_bias.html" rel="next">
+<link href="../notebooks/00_setup_check.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-4ffc9315a0e0aea7fb861ee41eb61485.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-0d608e68577a6fb23b4b0df5bed0fff8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Geohazard Change Detection with GRASS</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../SETUP.html" aria-current="page"> 
+<span class="menu-text">Workshop</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-slides" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Slides</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-slides">    
+        <li>
+    <a class="dropdown-item" href="../slides/context.html">
+ <span class="dropdown-text">Context</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../slides/wrapup.html">
+ <span class="dropdown-text">Wrap-up</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/ncsu-geoforall-lab/geohazards-workshop"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/00_setup_check.html">Notebooks</a></li><li class="breadcrumb-item"><a href="../notebooks/01_data_and_time.html">01 Data, datums, and time</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../SETUP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Notebooks</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/00_setup_check.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">00 Setup check</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/01_data_and_time.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">01 Data, datums, and time</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/02_coregister_and_bias.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">02 Co-registration and bias</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/03_lod_and_change.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">03 Level of detection and change</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/04_hazard_products.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">04 Products for emergency management</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data/README.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#coordinate-reference-systems-and-datums" id="toc-coordinate-reference-systems-and-datums" class="nav-link active" data-scroll-target="#coordinate-reference-systems-and-datums">Coordinate reference systems and datums</a></li>
+  <li><a href="#import-both-epochs" id="toc-import-both-epochs" class="nav-link" data-scroll-target="#import-both-epochs">Import both epochs</a></li>
+  <li><a href="#the-temporal-framework" id="toc-the-temporal-framework" class="nav-link" data-scroll-target="#the-temporal-framework">The temporal framework</a></li>
+  <li><a href="#a-naive-dod" id="toc-a-naive-dod" class="nav-link" data-scroll-target="#a-naive-dod">A naive DoD</a>
+  <ul class="collapse">
+  <li><a href="#what-nearest-cell-sampling-does" id="toc-what-nearest-cell-sampling-does" class="nav-link" data-scroll-target="#what-nearest-cell-sampling-does">What nearest-cell sampling does</a></li>
+  </ul></li>
+  <li><a href="#burned-and-unburned-ground" id="toc-burned-and-unburned-ground" class="nav-link" data-scroll-target="#burned-and-unburned-ground">Burned and unburned ground</a></li>
+  <li><a href="#your-turn" id="toc-your-turn" class="nav-link" data-scroll-target="#your-turn">Your turn</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/ncsu-geoforall-lab/geohazards-workshop/blob/main/notebooks/01_data_and_time.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/ncsu-geoforall-lab/geohazards-workshop/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/00_setup_check.html">Notebooks</a></li><li class="breadcrumb-item"><a href="../notebooks/01_data_and_time.html">01 Data, datums, and time</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">01. Data, datums, and the temporal framework</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>We start with two lidar DTMs of the focal region. One was flown in September 2013. The other was flown in fall 2022, six to twelve weeks after the McKinney Fire and the August 2 storm. By the end of this block both epochs are in GRASS, registered in a space-time raster dataset, and differenced into a first DEM of Difference (DoD). The rest of the workshop is about how far to trust it.</p>
+<div id="1b4db8ed" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T06:42:17.466874Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T06:42:17.466752Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T06:42:17.616083Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T06:42:17.615337Z&quot;}}" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> io</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> workshop_utils <span class="im">import</span> RAW, Tools, gj, gs, stable_stats, start</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>tools, session <span class="op">=</span> start(<span class="st">"01"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Block 01 ready in mapset workshop</code></pre>
+</div>
+</div>
+<section id="coordinate-reference-systems-and-datums" class="level2">
+<h2 class="anchored" data-anchor-id="coordinate-reference-systems-and-datums">Coordinate reference systems and datums</h2>
+<p>Both files report the same coordinate reference system (CRS).</p>
+<div id="bbcd7243" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T06:42:17.617903Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T06:42:17.617429Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T06:42:17.729312Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T06:42:17.728786Z&quot;}}" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>epochs <span class="op">=</span> {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dtm_2013_native"</span>: RAW <span class="op">/</span> <span class="st">"usfs_2013_dtm.tif"</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dtm_2022"</span>: RAW <span class="op">/</span> <span class="st">"usgs_2022_dtm.tif"</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, path <span class="kw">in</span> epochs.items():</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    crs <span class="op">=</span> tools.g_proj(flags<span class="op">=</span><span class="st">"p"</span>, georef<span class="op">=</span><span class="bu">str</span>(path), <span class="bu">format</span><span class="op">=</span><span class="st">"projjson"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>crs[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>dtm_2013_native: NAD83 / UTM zone 10N
+dtm_2022: NAD83 / UTM zone 10N</code></pre>
+</div>
+</div>
+<p>The collection metadata tells a different story.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Epoch</th>
+<th>Horizontal datum</th>
+<th>Vertical datum</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2013, USFS</td>
+<td>NAD83</td>
+<td>NAVD88, GEOID12A</td>
+</tr>
+<tr class="even">
+<td>2022, USGS 3DEP</td>
+<td>NAD83(2011)</td>
+<td>NAVD88, GEOID18</td>
+</tr>
+</tbody>
+</table>
+<p>The file headers do not record the NAD83 realization. If we tell PROJ the 2013 file is the original NAD83 and ask for NAD83(2011), it applies the NADCON5 grid shift. Without the grid it silently applies none.</p>
+<div id="84040795" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T06:42:17.730494Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T06:42:17.730373Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T06:42:20.265855Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T06:42:20.265416Z&quot;}}" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>point <span class="op">=</span> <span class="st">"522000 4625000 0</span><span class="ch">\n</span><span class="st">"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> network <span class="kw">in</span> (<span class="st">"OFF"</span>, <span class="st">"ON"</span>):</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    out <span class="op">=</span> subprocess.run(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        [<span class="st">"cs2cs"</span>, <span class="st">"-d"</span>, <span class="st">"3"</span>, <span class="st">"EPSG:26910"</span>, <span class="st">"EPSG:6339"</span>],</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="bu">input</span><span class="op">=</span>point,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        capture_output<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        text<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        env<span class="op">=</span>{<span class="op">**</span>os.environ, <span class="st">"PROJ_NETWORK"</span>: network},</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    ).stdout.split()</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"PROJ_NETWORK=</span><span class="sc">{</span>network<span class="sc">}</span><span class="ss">: 522000 4625000 -&gt; </span><span class="sc">{</span>out[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>out[<span class="dv">1</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>PROJ_NETWORK=OFF: 522000 4625000 -&gt; 522000.000 4625000.000
+PROJ_NETWORK=ON: 522000 4625000 -&gt; 522000.202 4625000.552</code></pre>
+</div>
+</div>
+<p>With the grid, that point moves about 0.6 m. The geoid models differ too. Here GEOID18 sits 2 to 3 cm below GEOID12A (compared with GEOID12B, which NGS documents as identical to GEOID12A outside Puerto Rico), so the same ground reads 2 to 3 cm higher in 2022 before anything has changed.</p>
+<p>We do not resolve either offset by relabeling files. The project uses EPSG:26910, the CRS both files declare, so nothing is reprojected on import and the result does not depend on whether PROJ can reach its grids. Block 02 measures the remaining horizontal and vertical offset on stable ground instead.</p>
+</section>
+<section id="import-both-epochs" class="level2">
+<h2 class="anchored" data-anchor-id="import-both-epochs">Import both epochs</h2>
+<p>The computational region is the focal area at 1 m. <code>r.import</code> clips each file to the region. Both files already use the project CRS, so nothing is reprojected, and each epoch keeps the grid it was delivered on.</p>
+<div id="ae32e2bc" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T06:42:20.267278Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T06:42:20.267180Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T06:42:21.541593Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T06:42:21.541148Z&quot;}}" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, path <span class="kw">in</span> epochs.items():</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    tools.r_import(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">input</span><span class="op">=</span><span class="bu">str</span>(path),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        output<span class="op">=</span>name,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        extent<span class="op">=</span><span class="st">"region"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        overwrite<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>region <span class="op">=</span> gs.region()</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> epochs:</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    info <span class="op">=</span> gs.raster_info(name)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    dx <span class="op">=</span> (info[<span class="st">"west"</span>] <span class="op">-</span> region[<span class="st">"w"</span>] <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">%</span> region[<span class="st">"ewres"</span>] <span class="op">-</span> <span class="fl">0.5</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    dy <span class="op">=</span> (info[<span class="st">"north"</span>] <span class="op">-</span> region[<span class="st">"n"</span>] <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">%</span> region[<span class="st">"nsres"</span>] <span class="op">-</span> <span class="fl">0.5</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">: offset from the region grid </span><span class="sc">{</span>dx<span class="sc">:+.3f}</span><span class="ss"> m east, </span><span class="sc">{</span>dy<span class="sc">:+.3f}</span><span class="ss"> m north"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>dtm_2013_native: offset from the region grid +0.290 m east, -0.170 m north
+dtm_2022: offset from the region grid -0.000 m east, +0.000 m north</code></pre>
+</div>
+</div>
+<p>The 2022 grid sits on the region grid. The 2013 grid is offset by about a third of a cell. Any tool that reads the 2013 DTM on this region takes the nearest 2013 cell, which moves the whole surface by that offset. Resample it onto the region with bilinear interpolation and use that as the working 2013 DTM.</p>
+<div id="01f5c6f0" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T06:42:21.542872Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T06:42:21.542760Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T06:42:23.321612Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T06:42:23.321054Z&quot;}}" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>tools.r_resamp_interp(<span class="bu">input</span><span class="op">=</span><span class="st">"dtm_2013_native"</span>, output<span class="op">=</span><span class="st">"dtm_2013"</span>, method<span class="op">=</span><span class="st">"bilinear"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> (<span class="st">"dtm_2013"</span>, <span class="st">"dtm_2022"</span>):</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    tools.r_relief(<span class="bu">input</span><span class="op">=</span>name, output<span class="op">=</span><span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">_relief"</span>, overwrite<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="9e840ab2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T06:42:23.322796Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T06:42:23.322667Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T06:42:25.178475Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T06:42:25.177989Z&quot;}}" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>tools.v_to_rast(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">input</span><span class="op">=</span><span class="st">"mckinney_perimeter@PERMANENT"</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    output<span class="op">=</span><span class="st">"burned_area"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    use<span class="op">=</span><span class="st">"val"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    value<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    overwrite<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>tools.r_mapcalc(expression<span class="op">=</span><span class="st">"burned = if(isnull(burned_area), 0, 1)"</span>, overwrite<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>tools.r_category(</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"burned"</span>, separator<span class="op">=</span><span class="st">":"</span>, rules<span class="op">=</span>io.StringIO(<span class="st">"0:unburned</span><span class="ch">\n</span><span class="st">1:burned</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Color the burned ground by elevation and leave the unburned ground gray.</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>tools.r_colors(<span class="bu">map</span><span class="op">=</span><span class="st">"dtm_2022"</span>, color<span class="op">=</span><span class="st">"elevation"</span>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>tools.r_mapcalc(expression<span class="op">=</span><span class="st">"dtm_2022_burned = if(burned == 1, dtm_2022, null())"</span>)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>tools.r_colors(<span class="bu">map</span><span class="op">=</span><span class="st">"dtm_2022_burned"</span>, raster<span class="op">=</span><span class="st">"dtm_2022"</span>)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>fire <span class="op">=</span> gj.Map(width<span class="op">=</span><span class="dv">700</span>)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>fire.d_rast(<span class="bu">map</span><span class="op">=</span><span class="st">"dtm_2022_relief"</span>)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>fire.d_shade(shade<span class="op">=</span><span class="st">"dtm_2022_relief"</span>, color<span class="op">=</span><span class="st">"dtm_2022_burned"</span>)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>fire.d_vect(<span class="bu">map</span><span class="op">=</span><span class="st">"nhd_flowlines@PERMANENT"</span>, color<span class="op">=</span><span class="st">"0:92:230"</span>, width<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>fire.d_vect(<span class="bu">map</span><span class="op">=</span><span class="st">"mckinney_perimeter@PERMANENT"</span>, fill_color<span class="op">=</span><span class="st">"none"</span>, color<span class="op">=</span><span class="st">"red"</span>, width<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>fire.d_legend(</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    raster<span class="op">=</span><span class="st">"dtm_2022"</span>, title<span class="op">=</span><span class="st">"Elevation 2022 (m)"</span>, at<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">40</span>, <span class="dv">2</span>, <span class="dv">5</span>), flags<span class="op">=</span><span class="st">"b"</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>fire.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_data_and_time_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The red line is the MTBS fire perimeter. Ground inside it, which burned, is colored by elevation. Ground outside it is gray. The blue lines are the mapped streams from the USGS National Hydrography Dataset (NHD). The fire control line follows Humbug Creek, so part of this region did not burn. That unburned ground is what we use to measure error.</p>
+</section>
+<section id="the-temporal-framework" class="level2">
+<h2 class="anchored" data-anchor-id="the-temporal-framework">The temporal framework</h2>
+<p>With two epochs a time series sounds like overkill. It stops being overkill the first time you add a third collection, and it keeps the acquisition dates attached to the data. Each epoch is registered with its collection window as a time interval.</p>
+<div id="97dbb851" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T06:42:25.181464Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T06:42:25.181353Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T06:42:28.127093Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T06:42:28.126582Z&quot;}}" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"epochs.txt"</span>, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    f.write(<span class="st">"dtm_2013|2013-09-04|2013-09-08</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    f.write(<span class="st">"dtm_2022|2022-09-14|2022-10-29</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>tools.t_create(</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">=</span><span class="st">"dtm"</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">type</span><span class="op">=</span><span class="st">"strds"</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    temporaltype<span class="op">=</span><span class="st">"absolute"</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">"Humbug Creek lidar DTMs"</span>,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    description<span class="op">=</span><span class="st">"Bare-earth DTMs, 1 m, focal region"</span>,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    overwrite<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>tools.t_register(<span class="bu">input</span><span class="op">=</span><span class="st">"dtm"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"raster"</span>, <span class="bu">file</span><span class="op">=</span><span class="st">"epochs.txt"</span>, overwrite<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(tools.t_rast_list(<span class="bu">input</span><span class="op">=</span><span class="st">"dtm"</span>, columns<span class="op">=</span><span class="st">"name,start_time,end_time"</span>).text)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>name|start_time|end_time
+dtm_2013|2013-09-04 00:00:00|2013-09-08 00:00:00
+dtm_2022|2022-09-14 00:00:00|2022-10-29 00:00:00</code></pre>
+</div>
+</div>
+</section>
+<section id="a-naive-dod" class="level2">
+<h2 class="anchored" data-anchor-id="a-naive-dod">A naive DoD</h2>
+<p>Subtract the earlier epoch from the later one with <em>r.dem.dod</em>, pulling the map names from the dataset in time order. Negative values are surface lowering (erosion), positive values are surface raising (deposition). <code>range=1</code> fixes the color scale at plus or minus 1 m so later DoDs compare with this one.</p>
+<div id="5249780d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T06:42:28.128204Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T06:42:28.128106Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T06:42:29.939012Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T06:42:29.938498Z&quot;}}" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> tools.t_rast_list(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">input</span><span class="op">=</span><span class="st">"dtm"</span>, columns<span class="op">=</span><span class="st">"name"</span>, order<span class="op">=</span><span class="st">"start_time"</span>, flags<span class="op">=</span><span class="st">"u"</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>).text.split()</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>before, after <span class="op">=</span> names[<span class="dv">0</span>], names[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>tools.r_dem_dod(dem<span class="op">=</span>after, reference<span class="op">=</span>before, output<span class="op">=</span><span class="st">"dod_naive"</span>, <span class="bu">range</span><span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"dod_naive = </span><span class="sc">{</span>after<span class="sc">}</span><span class="ss"> - </span><span class="sc">{</span>before<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>dod_naive = dtm_2022 - dtm_2013</code></pre>
+</div>
+</div>
+<div id="5e489881" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T06:42:29.940130Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T06:42:29.940033Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T06:42:30.552263Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T06:42:30.551813Z&quot;}}" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dod <span class="op">=</span> gj.Map(width<span class="op">=</span><span class="dv">700</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>dod.d_shade(shade<span class="op">=</span><span class="st">"dtm_2022_relief"</span>, color<span class="op">=</span><span class="st">"dod_naive"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>dod.d_vect(</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"mckinney_perimeter@PERMANENT"</span>, fill_color<span class="op">=</span><span class="st">"none"</span>, color<span class="op">=</span><span class="st">"black"</span>, width<span class="op">=</span><span class="dv">2</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>dod.d_legend(</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    raster<span class="op">=</span><span class="st">"dod_naive"</span>, title<span class="op">=</span><span class="st">"DoD (m)"</span>, <span class="bu">range</span><span class="op">=</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>), at<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">40</span>, <span class="dv">2</span>, <span class="dv">5</span>), flags<span class="op">=</span><span class="st">"b"</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>dod.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_data_and_time_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="what-nearest-cell-sampling-does" class="level3">
+<h3 class="anchored" data-anchor-id="what-nearest-cell-sampling-does">What nearest-cell sampling does</h3>
+<p><em>r.mapcalc</em> reads every input on the region grid and takes the nearest cell. Give it the native 2013 grid and compare with the resampled DoD. <em>r.dem.dod</em> run on the same native grid resamples it and prints a warning with the offset.</p>
+<div id="9e811c9a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T06:42:30.557171Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T06:42:30.557070Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T06:42:33.035399Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T06:42:33.034920Z&quot;}}" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep the warning text so it shows in the notebook.</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> Tools(capture_stderr<span class="op">=</span><span class="va">True</span>, consistent_return_value<span class="op">=</span><span class="va">True</span>).r_dem_dod(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    dem<span class="op">=</span><span class="st">"dtm_2022"</span>, reference<span class="op">=</span><span class="st">"dtm_2013_native"</span>, output<span class="op">=</span><span class="st">"dod_resampled"</span>, <span class="bu">range</span><span class="op">=</span><span class="dv">1</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result.stderr.strip())</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>tools.r_mapcalc(expression<span class="op">=</span><span class="st">"dod_nearest = dtm_2022 - dtm_2013_native"</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>tools.r_mapcalc(expression<span class="op">=</span><span class="st">"nearest_error = dod_nearest - dod_naive"</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>error <span class="op">=</span> tools.r_univar(<span class="bu">map</span><span class="op">=</span><span class="st">"nearest_error"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"json"</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"Nearest-cell DoD minus resampled DoD: min </span><span class="sc">{</span>error[<span class="st">'min'</span>]<span class="sc">:+.2f}</span><span class="ss"> m, "</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"max </span><span class="sc">{</span>error[<span class="st">'max'</span>]<span class="sc">:+.2f}</span><span class="ss"> m, std </span><span class="sc">{</span>error[<span class="st">'stddev'</span>]<span class="sc">:.3f}</span><span class="ss"> m"</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>WARNING: Raster map &lt;dtm_2013_native&gt; is not aligned with the computational
+         region (resolution 1 x 1, origin offset 0.290, -0.170). Resampling
+         with bilinear interpolation.
+Nearest-cell DoD minus resampled DoD: min -2.18 m, max +2.25 m, std 0.108 m</code></pre>
+</div>
+</div>
+<p>Two patterns stand out. Humbug Creek and the side channels are blue, which is deposition after the storm. On the hillslopes the color shifts with the direction a slope faces, which is what a horizontal offset between the epochs would produce. Block 02 measures how much of that offset is real.</p>
+</section>
+</section>
+<section id="burned-and-unburned-ground" class="level2">
+<h2 class="anchored" data-anchor-id="burned-and-unburned-ground">Burned and unburned ground</h2>
+<p>If the DoD were all real change, unburned ground would average close to zero. Compare the two.</p>
+<div id="463ac146" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T06:42:33.036629Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T06:42:33.036533Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T06:42:34.065572Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T06:42:34.065070Z&quot;}}" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>stats <span class="op">=</span> tools.r_univar(<span class="bu">map</span><span class="op">=</span><span class="st">"dod_naive"</span>, zones<span class="op">=</span><span class="st">"burned"</span>, flags<span class="op">=</span><span class="st">"e"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"json"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> zone <span class="kw">in</span> stats:</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>zone[<span class="st">'zone_label'</span>]<span class="sc">:&gt;9}</span><span class="ss">: mean </span><span class="sc">{</span>zone[<span class="st">'mean'</span>]<span class="sc">:+.3f}</span><span class="ss"> m, median </span><span class="sc">{</span>zone[<span class="st">'median'</span>]<span class="sc">:+.3f}</span><span class="ss"> m, "</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"std </span><span class="sc">{</span>zone[<span class="st">'stddev'</span>]<span class="sc">:.3f}</span><span class="ss"> m, cells </span><span class="sc">{</span>zone[<span class="st">'n'</span>]<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> unburned: mean +0.094 m, median +0.098 m, std 0.167 m, cells 952308
+   burned: mean -0.017 m, median -0.013 m, std 0.160 m, cells 5504246</code></pre>
+</div>
+</div>
+<p>Write down the unburned mean and standard deviation. A nonzero mean on ground that did not burn is systematic error, which includes the datum offsets above. The spread is noise. Block 02 removes the first and block 03 turns the second into a level of detection.</p>
+</section>
+<section id="your-turn" class="level2">
+<h2 class="anchored" data-anchor-id="your-turn">Your turn</h2>
+<p>Error on steep slopes is often larger because a small horizontal offset turns into a large vertical one. Split the unburned ground into slope classes and compare the DoD spread two ways: the standard deviation, and the NMAD (normalized median absolute deviation), a spread estimate that a few large outliers cannot pull. Change <code>breaks</code> and see how the numbers move.</p>
+<div id="6ea998a5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T06:42:34.066706Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T06:42:34.066579Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T06:42:38.249315Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T06:42:38.248779Z&quot;}}" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>tools.r_slope_aspect(elevation<span class="op">=</span><span class="st">"dtm_2013"</span>, slope<span class="op">=</span><span class="st">"slope_2013"</span>, overwrite<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Slope class breaks in degrees. Try other breaks, then rerun this cell and the next.</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>breaks <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">15</span>, <span class="dv">30</span>, <span class="dv">90</span>]</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> {</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    n: <span class="ss">f"</span><span class="sc">{</span>lo<span class="sc">}</span><span class="ss">-</span><span class="sc">{</span>hi<span class="sc">}</span><span class="ss"> deg"</span> <span class="cf">for</span> n, (lo, hi) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(breaks, breaks[<span class="dv">1</span>:]), start<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Nested if() gives each unburned cell the number of its slope class.</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>classes <span class="op">=</span> <span class="st">"null()"</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> <span class="bu">sorted</span>(labels, reverse<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    classes <span class="op">=</span> <span class="ss">f"if(slope_2013 &lt; </span><span class="sc">{</span>breaks[n]<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>classes<span class="sc">}</span><span class="ss">)"</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>tools.r_mapcalc(</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    expression<span class="op">=</span><span class="ss">f"slope_class = if(burned == 0, </span><span class="sc">{</span>classes<span class="sc">}</span><span class="ss">, null())"</span>, overwrite<span class="op">=</span><span class="va">True</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>spread <span class="op">=</span> {</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>    zone[<span class="st">"zone"</span>]: zone</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> zone <span class="kw">in</span> tools.r_univar(<span class="bu">map</span><span class="op">=</span><span class="st">"dod_naive"</span>, zones<span class="op">=</span><span class="st">"slope_class"</span>, <span class="bu">format</span><span class="op">=</span><span class="st">"json"</span>)</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="st">'class'</span><span class="sc">:&gt;10}{</span><span class="st">'mean'</span><span class="sc">:&gt;9}{</span><span class="st">'std'</span><span class="sc">:&gt;8}{</span><span class="st">'NMAD'</span><span class="sc">:&gt;8}</span><span class="ss">"</span>)</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n, label <span class="kw">in</span> labels.items():</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>    tools.r_mapcalc(expression<span class="op">=</span><span class="ss">f"slope_bin = if(slope_class == </span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">, 1, null())"</span>)</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>    nmad <span class="op">=</span> stable_stats(tools, <span class="st">"dod_naive"</span>, <span class="st">"slope_bin"</span>)[<span class="st">"nmad"</span>]</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>label<span class="sc">:&gt;10}{</span>spread[n][<span class="st">'mean'</span>]<span class="sc">:&gt;+9.3f}{</span>spread[n][<span class="st">'stddev'</span>]<span class="sc">:&gt;8.3f}{</span>nmad<span class="sc">:&gt;8.3f}</span><span class="ss">"</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     class     mean     std    NMAD
+  0-15 deg   +0.119   0.205   0.076
+ 15-30 deg   +0.079   0.145   0.082
+ 30-90 deg   +0.097   0.157   0.092</code></pre>
+</div>
+</div>
+<p>Map the slope classes on the unburned ground, colored from light to dark by their mean offset, with the mean in the legend. If the offset were a single vertical shift, every class would have the same mean. Rerun this cell after changing the class breaks.</p>
+<div id="5d6875fb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T06:42:38.250577Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T06:42:38.250470Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T06:42:39.151349Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T06:42:39.150813Z&quot;}}" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>means <span class="op">=</span> {n: spread[n][<span class="st">"mean"</span>] <span class="cf">for</span> n <span class="kw">in</span> labels}</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>tools.r_category(</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"slope_class"</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    separator<span class="op">=</span><span class="st">":"</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    rules<span class="op">=</span>io.StringIO(</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">""</span>.join(<span class="ss">f"</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">:</span><span class="sc">{</span>labels[n]<span class="sc">}</span><span class="ss">, mean </span><span class="sc">{</span>means[n]<span class="sc">:+.3f}</span><span class="ss"> m</span><span class="ch">\n</span><span class="ss">"</span> <span class="cf">for</span> n <span class="kw">in</span> labels)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Light to dark in order of mean offset, for any number of classes.</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>light, dark <span class="op">=</span> (<span class="dv">255</span>, <span class="dv">237</span>, <span class="dv">160</span>), (<span class="dv">240</span>, <span class="dv">59</span>, <span class="dv">32</span>)</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>order <span class="op">=</span> <span class="bu">sorted</span>(means, key<span class="op">=</span>means.get)</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> shade(rank):</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> rank <span class="op">/</span> <span class="bu">max</span>(<span class="bu">len</span>(order) <span class="op">-</span> <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">":"</span>.join(<span class="bu">str</span>(<span class="bu">round</span>(a <span class="op">+</span> (b <span class="op">-</span> a) <span class="op">*</span> t)) <span class="cf">for</span> a, b <span class="kw">in</span> <span class="bu">zip</span>(light, dark))</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>color_of <span class="op">=</span> {n: shade(rank) <span class="cf">for</span> rank, n <span class="kw">in</span> <span class="bu">enumerate</span>(order)}</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="co"># r.colors needs the rules in ascending category order.</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>tools.r_colors(</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"slope_class"</span>,</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>    rules<span class="op">=</span>io.StringIO(<span class="st">""</span>.join(<span class="ss">f"</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>color_of[n]<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span> <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">sorted</span>(means))),</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>offsets <span class="op">=</span> gj.Map(width<span class="op">=</span><span class="dv">700</span>)</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>offsets.d_rast(<span class="bu">map</span><span class="op">=</span><span class="st">"dtm_2013_relief"</span>)</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>offsets.d_shade(shade<span class="op">=</span><span class="st">"dtm_2013_relief"</span>, color<span class="op">=</span><span class="st">"slope_class"</span>)</span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>offsets.d_vect(</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>    <span class="bu">map</span><span class="op">=</span><span class="st">"mckinney_perimeter@PERMANENT"</span>, fill_color<span class="op">=</span><span class="st">"none"</span>, color<span class="op">=</span><span class="st">"black"</span>, width<span class="op">=</span><span class="dv">2</span></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>offsets.d_legend(</span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>    raster<span class="op">=</span><span class="st">"slope_class"</span>,</span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">"Slope class (unburned)"</span>,</span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>    at<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span> <span class="op">+</span> <span class="dv">8</span> <span class="op">*</span> <span class="bu">len</span>(labels), <span class="dv">2</span>, <span class="dv">5</span>),</span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>    fontsize<span class="op">=</span><span class="dv">12</span>,</span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>    title_fontsize<span class="op">=</span><span class="dv">13</span>,</span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>    flags<span class="op">=</span><span class="st">"b"</span>,</span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>offsets.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01_data_and_time_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>With the default breaks the class means fall between +0.08 and +0.12 m with no steady trend. Most of the offset is a vertical shift shared by every class. The standard deviation does not grow with slope either, because a small share of large differences dominates it. The NMAD ignores those and does grow with slope, from about 7.6 cm below 15 degrees to about 9.2 cm above 30. Block 03 builds its level of detection on that trend. Rerun the nearest-cell DoD through these classes and the spread between them grows, because the grid offset acts like a horizontal shift. Block 02 separates the vertical offset from what horizontal offset remains.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ncsu-geoforall-lab\.github\.io\/geohazards-workshop\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../notebooks/00_setup_check.html" class="pagination-link" aria-label="00 Setup check">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">00 Setup check</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../notebooks/02_coregister_and_bias.html" class="pagination-link" aria-label="02 Co-registration and bias">
+        <span class="nav-page-text">02 Co-registration and bias</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Supported by the U.S. National Science Foundation under award 2606178.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ncsu-geoforall-lab/geohazards-workshop/blob/main/notebooks/01_data_and_time.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/ncsu-geoforall-lab/geohazards-workshop/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>Code GPL-3.0. Text CC BY 4.0.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
