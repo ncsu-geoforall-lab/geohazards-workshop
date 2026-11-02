@@ -37,13 +37,13 @@ By the end of the workshop you will be able to:
 | Time | Part | Notebook |
 | --- | --- | --- |
 | 13:00 | Welcome and environment check | [00_setup_check](notebooks/00_setup_check.ipynb) |
-| 13:15 | The McKinney rain-on-fire event, lidar products, and sources of error | slides |
+| 13:15 | The McKinney rain-on-fire event, lidar products, and sources of error | [context slides](slides/context.qmd) |
 | 13:35 | Data, datums, and the temporal framework | [01_data_and_time](notebooks/01_data_and_time.ipynb) |
 | 14:10 | Co-registration and bias | [02_coregister_and_bias](notebooks/02_coregister_and_bias.ipynb) |
 | 14:45 | Break | |
 | 14:55 | Level of detection and significant change | [03_lod_and_change](notebooks/03_lod_and_change.ipynb) |
 | 15:30 | Products for emergency management | [04_hazard_products](notebooks/04_hazard_products.ipynb) |
-| 15:50 | Wrap-up and adapting the workflow to your area | [slides](slides/wrapup.qmd) |
+| 15:50 | Wrap-up and adapting the workflow to your area | [wrap-up slides](slides/wrapup.qmd) |
 
 Each notebook starts by loading a checkpoint, so you can rejoin at the start
 of any part. If you fall behind, open the next notebook and run all cells. It
