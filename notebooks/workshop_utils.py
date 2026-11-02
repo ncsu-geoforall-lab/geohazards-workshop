@@ -16,8 +16,14 @@ sys.path.append(
     subprocess.check_output(["grass", "--config", "python_path"], text=True).strip()
 )
 
+# Notebooks import GRASS modules from here, after the path is set, so they run
+# outside the devcontainer too.
 import grass.jupyter as gj  # noqa: E402
+import grass.script as gs  # noqa: E402
+from grass.script import array as garray  # noqa: E402
 from grass.tools import Tools  # noqa: E402
+
+__all__ = ["RAW", "Tools", "garray", "gj", "gs", "rounded", "stable_stats", "start"]
 
 
 def start(block, required=()):
