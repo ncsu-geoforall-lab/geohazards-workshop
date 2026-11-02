@@ -66,7 +66,7 @@ The download box in EPSG:26910 is the focal region plus the 100 m clip
 buffer: xmin 520423, ymin 4624467, xmax 523597, ymax 4626838. Choose
 GeoTIFF output with the bare-earth and highest-hit layers, then pass
 `output_be.tif` as `--dtm2013` and `output_hh.tif` as `--dsm2013`. Highest hit
-minus bare earth gives pre-fire canopy height for block 02. Cite the dataset
+minus bare earth gives pre-fire canopy height for part 02. Cite the dataset
 as listed under References.
 
 The delivered 2013 grid starts at 520422.29, 4626838.83, so its cells sit

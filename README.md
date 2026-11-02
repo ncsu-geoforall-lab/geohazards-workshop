@@ -34,7 +34,7 @@ By the end of the workshop you will be able to:
 
 ## Schedule
 
-| Time | Block | Notebook |
+| Time | Part | Notebook |
 | --- | --- | --- |
 | 13:00 | Welcome and environment check | [00_setup_check](notebooks/00_setup_check.ipynb) |
 | 13:15 | The McKinney rain-on-fire event, lidar products, and sources of error | slides |
@@ -45,10 +45,10 @@ By the end of the workshop you will be able to:
 | 15:30 | Products for emergency management | [04_hazard_products](notebooks/04_hazard_products.ipynb) |
 | 15:50 | Wrap-up and adapting the workflow to your area | [slides](slides/wrapup.qmd) |
 
-Each notebook starts by loading a checkpoint, so you can rejoin at any block.
-If you fall behind, open the next notebook and run all cells. It picks up the
-maps it needs from the checkpoints of the earlier blocks, and you do not need
-to finish or close the notebook you were in.
+Each notebook starts by loading a checkpoint, so you can rejoin at the start
+of any part. If you fall behind, open the next notebook and run all cells. It
+picks up the maps it needs from the checkpoints of the earlier parts, and you
+do not need to finish or close the notebook you were in.
 
 ## Getting started
 

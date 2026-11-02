@@ -26,12 +26,12 @@ from grass.tools import Tools  # noqa: E402
 __all__ = ["RAW", "Tools", "garray", "gj", "gs", "rounded", "stable_stats", "start"]
 
 
-def start(block, required=()):
-    """Start a GRASS session for a workshop block.
+def start(part, required=()):
+    """Start a GRASS session for a workshop part.
 
     Work happens in the mapset named by WORKSHOP_MAPSET (default "workshop").
     If any map in `required` is missing there, the checkpoint mapsets of all
-    earlier blocks are added to the search path so the block can still run.
+    earlier parts are added to the search path so the part can still run.
     """
     if not (PROJECT / "PERMANENT").exists():
         raise FileNotFoundError(
@@ -58,7 +58,7 @@ def start(block, required=()):
     if missing:
         checkpoints = [
             f"checkpoint_{n:02d}"
-            for n in range(int(block) - 1, 0, -1)
+            for n in range(int(part) - 1, 0, -1)
             if (PROJECT / f"checkpoint_{n:02d}").exists()
         ]
         if not checkpoints:
@@ -69,7 +69,7 @@ def start(block, required=()):
         print(f"Missing {', '.join(missing)}; using {', '.join(checkpoints)}")
 
     tools.g_region(region="focal@PERMANENT")
-    print(f"Block {block} ready in mapset {mapset}")
+    print(f"Part {part} ready in mapset {mapset}")
     return tools, session
 
 
