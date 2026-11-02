@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Build one checkpoint mapset per workshop block and repack the data release
+# Build one checkpoint mapset per workshop part and repack the data release
 # (instructor only). Run after scripts/prepare_data.py, inside the devcontainer.
 #
 # Each notebook runs with WORKSHOP_MAPSET=checkpoint_NN, so its outputs land in
-# that mapset and it reads earlier blocks from the earlier checkpoints. A
+# that mapset and it reads earlier parts from the earlier checkpoints. A
 # participant who falls behind starts the next notebook in their own mapset and
 # workshop_utils.start() picks up the checkpoints. Each checkpoint keeps only
-# the rasters later blocks read, which keeps the release small. Block 04 feeds
-# no later block, so it has no checkpoint.
+# the rasters later parts read, which keeps the release small. Part 04 feeds
+# no later part, so it has no checkpoint.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -24,15 +24,15 @@ declare -A KEEP=(
 )
 
 cd "$ROOT/notebooks"
-for block in 01 02 03; do
-    notebook="$(ls "${block}"_*.ipynb)"
-    mapset="checkpoint_${block}"
+for part in 01 02 03; do
+    notebook="$(ls "${part}"_*.ipynb)"
+    mapset="checkpoint_${part}"
     echo "Building ${mapset} from ${notebook}"
     WORKSHOP_MAPSET="$mapset" uv run --with nbconvert jupyter nbconvert \
         --to notebook --execute --ExecutePreprocessor.timeout=1800 \
         --output "/tmp/${mapset}.ipynb" "$notebook"
     grass "$PROJECT/$mapset" --exec g.remove -f type=raster,vector \
-        pattern="*" exclude="${KEEP[$block]}" > /dev/null
+        pattern="*" exclude="${KEEP[$part]}" > /dev/null
 done
 
 cd "$ROOT"
