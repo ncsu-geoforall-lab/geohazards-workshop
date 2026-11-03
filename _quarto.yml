@@ -4,6 +4,7 @@ project:
   output-dir: _site
   resources:
     - site/nsf-logo.png
+    - site/social-card.jpg
     - site/cga-ncsu-white.png
   render:
     - index.qmd
@@ -26,6 +27,10 @@ execute:
 website:
   title: "Geohazard Change Detection with GRASS"
   site-url: https://ncsu-geoforall-lab.github.io/geohazards-workshop/
+  # Preview image for links shared on social media.
+  image: site/social-card.jpg
+  open-graph: true
+  twitter-card: true
   repo-url: https://github.com/ncsu-geoforall-lab/geohazards-workshop
   repo-actions: [source, issue]
   # Previous and next links at the bottom of each page follow the sidebar order.
