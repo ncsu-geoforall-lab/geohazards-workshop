@@ -400,3 +400,22 @@ for scenario in ("prefire", "postfire"):
     if gif.exists():
         shutil.copy(gif, OUT / gif.name)
         print(f"Copied {gif.name}")
+
+# Social preview card for the website: the DoD over the relief, 1200 x 630,
+# in a band through the creek and the control line.
+tools.g_region(region="focal@PERMANENT")
+full = tools.g_region(flags="g", format="json")
+band = (full["east"] - full["west"]) * 630 / 1200
+center = full["south"] + 0.42 * (full["north"] - full["south"])
+tools.g_region(n=center + band / 2, s=center - band / 2, res=1, flags="a")
+card = gj.Map(width=1200, height=630, use_region=True)
+card.d_shade(shade="dtm_2022_relief", color="dod_debiased")
+card.d_vect(
+    map="mckinney_perimeter@PERMANENT", fill_color="none", color="black", width=3
+)
+card_png = OUT / "social_card.png"
+card.save(str(card_png))
+Image.open(card_png).convert("RGB").save(REPO / "site" / "social-card.jpg", quality=88)
+card_png.unlink()
+tools.g_region(region="focal@PERMANENT")
+print("Wrote site/social-card.jpg")
