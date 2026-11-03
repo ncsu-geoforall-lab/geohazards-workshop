@@ -274,7 +274,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>Run every cell. Each one prints <code>OK</code> or tells you what to fix. If anything fails, raise your hand now, before we start the analysis.</p>
-<div id="abeba3ee" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:58:48.352953Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:58:48.352792Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:58:48.752621Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:58:48.751642Z&quot;}}" data-execution_count="1">
+<div id="abeba3ee" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-03T04:57:15.897494Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-03T04:57:15.897346Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-03T04:57:16.269794Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-03T04:57:16.268932Z&quot;}}" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
@@ -299,7 +299,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 OK: GRASS version</code></pre>
 </div>
 </div>
-<div id="20a435a5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:58:48.754435Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:58:48.754212Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:58:48.774807Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:58:48.773990Z&quot;}}" data-execution_count="2">
+<div id="20a435a5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-03T04:57:16.271647Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-03T04:57:16.271436Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-03T04:57:16.291386Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-03T04:57:16.290498Z&quot;}}" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -310,7 +310,7 @@ OK: GRASS version</code></pre>
 OK: Python dependencies</code></pre>
 </div>
 </div>
-<div id="a562acaa" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:58:48.776706Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:58:48.776503Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:58:48.823495Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:58:48.822579Z&quot;}}" data-execution_count="3">
+<div id="a562acaa" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-03T04:57:16.292985Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-03T04:57:16.292766Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-03T04:57:16.338143Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-03T04:57:16.337157Z&quot;}}" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>repo <span class="op">=</span> Path.cwd().parent <span class="cf">if</span> Path.cwd().name <span class="op">==</span> <span class="st">"notebooks"</span> <span class="cf">else</span> Path.cwd()</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>project <span class="op">=</span> repo <span class="op">/</span> <span class="st">"grassdata"</span> <span class="op">/</span> <span class="st">"humbug_creek"</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -348,7 +348,7 @@ OK: Python dependencies</code></pre>
 {'name': 'UTM', 'type': 'utm', 'type_code': 1, 'zone': 10}</code></pre>
 </div>
 </div>
-<div id="dcc5bf0f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:58:48.825526Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:58:48.825309Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:58:48.830915Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:58:48.830060Z&quot;}}" data-execution_count="4">
+<div id="dcc5bf0f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-03T04:57:16.339678Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-03T04:57:16.339522Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-03T04:57:16.344579Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-03T04:57:16.343815Z&quot;}}" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rdem <span class="op">=</span> [</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"r.dem.coregister"</span>,</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"r.dem.nk"</span>,</span>
@@ -378,7 +378,7 @@ OK: Python dependencies</code></pre>
 <pre><code>OK: all r.dem tools installed</code></pre>
 </div>
 </div>
-<div id="d4t40k01" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-02T19:58:48.833756Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-02T19:58:48.833531Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-02T19:58:48.837748Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-02T19:58:48.836424Z&quot;}}" data-execution_count="5">
+<div id="d4t40k01" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-11-03T04:57:16.346141Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-11-03T04:57:16.345972Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-11-03T04:57:16.349442Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-11-03T04:57:16.348442Z&quot;}}" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Stop here if the data is missing or old, so notebook 01 does not fail on it.</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> data_ok, (</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Run `bash scripts/fetch_data.sh` in a terminal, then rerun this notebook."</span></span>
