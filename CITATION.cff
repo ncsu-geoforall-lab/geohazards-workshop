@@ -6,7 +6,16 @@ authors:
     given-names: "Corey T."
     affiliation: "North Carolina State University"
     orcid: "https://orcid.org/0000-0002-2903-9924"
-version: 0.1.0
+version: 1.0.0
+date-released: 2026-11-02
+doi: 10.5281/zenodo.23698905
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.23698905
+    description: "Concept DOI, resolves to the latest version"
+  - type: doi
+    value: 10.5281/zenodo.23698906
+    description: "Version 1.0.0"
 url: "https://github.com/ncsu-geoforall-lab/geohazards-workshop"
 license: GPL-3.0
 keywords:
